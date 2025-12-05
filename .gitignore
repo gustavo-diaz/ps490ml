@@ -34,3 +34,5 @@ po/*~
 # RStudio Connect folder
 rsconnect/
 ps490ml.Rproj
+books
+.DS_Store
