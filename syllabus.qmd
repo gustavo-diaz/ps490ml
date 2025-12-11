@@ -162,7 +162,7 @@ We will devote some of our class meeting time over the course of the quarter to 
 
 Every week, a number of students (based on enrollment) will serve as note-taking leaders. Note taking leaders will prepare summaries, discussion, and talking points for the assigned material for the week and incorporate them in a collaborative document (format TBD).
 
-I will randomly assign topics during at the beginning of the quarter. Students are welcome to trade their turns as long as they notify the instructor at least one week ahead.
+I will randomly assign note-taking duties at the beginning of the quarter. Students are welcome to trade their turns as long as they notify the instructor at least one week ahead.
 
 Notes will be marked as satisfactory, unsatisfactory, or failed. Unsatisfactory marks can be resubmitted at any point before the final paper deadline. Notes are due on Tuesdays at 11:59PM **before** the corresponding class meeting.
 
@@ -253,7 +253,7 @@ This course follows the [Northwestern University Syllabus Standards](https://www
 
 @. Cantú, Francisco and Sebastián M. Saiegh. 2011. ["Fraudulent Democracy? An Analysis of Argentina's *Infamous Decade* Using Supervised Machine Learning."](https://doi.org/10.1093/pan/mpr033) *Political Analysis* 19 (4): 409-433
 
-@. Peterson, Andrew and Arthur Spirling. ["Classification Accuracy as a Substantive Quantity of Interest: Measuring Polarization in Westminster Systems"](https://doi.org/10.1017/pan.2017.39) *Political Analysis* 26 (1): 120-128
+@. Peterson, Andrew and Arthur Spirling. 2018. ["Classification Accuracy as a Substantive Quantity of Interest: Measuring Polarization in Westminster Systems"](https://doi.org/10.1017/pan.2017.39) *Political Analysis* 26 (1): 120-128
 
   
 ## Week 4 (January 29): Validation, selection, regularization {#w4}
@@ -268,7 +268,7 @@ This course follows the [Northwestern University Syllabus Standards](https://www
 
 @. Arnold, Christian, Luka Biedebach, Andreas Küpfer, and Marcel Neunhoeffer. 2024. ["The role of hyperparameters in machine learning models and how to tune them."](https://doi.org/10.1017/psrm.2023.61) *Political Science Research and Methods* 12 (4): 841-848
 
-@. Barberá, Pablo, Amber E. Boydstun, Suzanna Linn, Ryan McMahon, and Jonathan Nagler. 2021. ["Automated Text Classification of News Articles: A Practical Guide."](https://doi.org/10.1017/pan.2020.8)
+@. Barberá, Pablo, Amber E. Boydstun, Suzanna Linn, Ryan McMahon, and Jonathan Nagler. 2021. ["Automated Text Classification of News Articles: A Practical Guide."](https://doi.org/10.1017/pan.2020.8) *Political Analysis* 29 (1): 19-42
 
 @. Beltrán, Javier, Aina Gallego, Alba Huidobro, Enrique Romero, and LLuís Padró. 2021. ["Male and female politicians on Twitter: A machine learning approach."](https://doi.org/10.1111/1475-6765.12392) *European Journal of Political Research* 60 (1): 239-251
 
