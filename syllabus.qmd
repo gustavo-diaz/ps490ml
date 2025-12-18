@@ -340,6 +340,7 @@ This course follows the [Northwestern University Syllabus Standards](https://www
 
 
 ## Week 9 (March 5): Inference {#w9}
+**_Guest lecturer: Sam Fuller (Harvard)_**
 
 @. Fuller, Sam and Jack T. Rametta. 2024. ["Causal Forest and Double Robust Machine Learning for Political Science."](https://doi.org/10.31219/osf.io/nm9de_v3)
 
