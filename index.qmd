@@ -1,0 +1,32 @@
+---
+title: "POLI_SCI 490: Machine Learning in Political Science"
+author: "Gustavo Diaz"
+date: last-modified
+format: html
+---
+
+## Syllabus
+
+Click [here](/syllabus.pdf) for the most recent version.
+
+## Slides
+
+[Week 1: Introduction](slides/week1.html)
+
+Week 2: Regression
+
+Week 3: Classification
+
+Week 4: Validation, selection, regularization
+
+Week 5: Tree-based methods
+
+Week 6: Neural networks
+
+Week 7: Ensemble learning
+
+Week 8: Unsupervised learning
+
+Week 9: Inference
+
+Week 10: Extensions

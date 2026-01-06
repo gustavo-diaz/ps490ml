@@ -1,0 +1,253 @@
+---
+title: | 
+       | Machine Learning in
+       | Political Science
+subtitle: "POLI_SCI 490"
+author: "Winter 2026"
+format: 
+  revealjs:
+    slide-number: false
+    progress: false
+    code-overflow: wrap
+---
+
+## Plan for today
+
+- Motivation for the course
+
+- Introductions
+
+- Course overview
+
+# Motivation
+
+
+
+# What is Machine Learning?
+
+---
+
+![](https://workshops.tidymodels.org/slides/images/what_is_ml.png)
+
+::: aside
+Credit: <https://vas3k.com/blog/machine_learning/>
+:::
+
+---
+
+![](https://workshops.tidymodels.org/slides/images/ml_illustration.jpg)
+
+# How is this different from the methods I already learned?
+
+## Motivation 1 {.center}
+
+
+::: {style="text-align: center; font-size: 120%;"}
+Data Modeling Culture
+
+vs.
+
+Algorithmic Modeling Culture
+:::
+
+
+---
+
+::: {style="text-align: center;"}
+**Real world**<br>
+![](img/nature.png)
+:::
+
+. . .
+
+:::: {.columns}
+
+::: {.column width=50%}
+
+**Data Modeling Culture**<br>
+![](img/dmc.png)
+
+:::
+
+
+::::
+
+---
+
+::: {style="text-align: center;"}
+**Real world**<br>
+![](img/nature.png)
+:::
+
+
+:::: {.columns}
+
+::: {.column width=50%}
+
+**Data Modeling Culture**<br>
+![](img/dmc.png)
+
+:::
+
+::: {.column width=50%}
+
+
+**Algorithmic Modeling Culture**<br>
+![](img/amc.png)
+
+:::
+::::
+
+
+## Motivation 1 (revisited) {.center}
+
+
+::: {style="text-align: center; font-size: 120%;"}
+Inference
+
+vs.
+
+Prediction
+:::
+
+. . .
+
+::: {style="text-align: center;"}
+Any issues with this?
+:::
+
+
+## Motivation 1 (revisited again) {.center}
+
+
+::: {style="text-align: center; font-size: 120%;"}
+$\widehat \beta$-Inference
+
+vs.
+
+$\widehat Y$-Prediction
+:::
+
+. . .
+
+::: {style="text-align: center;"}
+Eventually these two traditions merge
+:::
+
+## Motivation 2 {.center}
+
+. . .
+
+::: {style="text-align: center; font-size: 120%;"}
+
+$$
+p > n
+$$
+
+:::
+
+## Motivation 2 {.center}
+
+::: {style="text-align: center; font-size: 120%;"}
+
+
+$$
+p \gg n
+$$
+
+:::
+
+## What this course is not about
+
+
+Computational Social Science
+
+Programming in `R`, `Python`, `Julia`, etc.
+
+Web scraping
+
+Processing unstructured data
+
+Generative AI
+
+. . .
+
+&nbsp;
+
+**Emphasis:** Incorporating new research methods
+
+# Introductions
+
+## Me {.center}
+
+::: {.callout-tip}
+## Gustavo Diaz
+Assistant Professor of Instruction in Political Science  
+**Email:** <gustavo.diaz@northwestern.edu>  
+**Website:** [gustavodiaz.org](https://gustavodiaz.org)  
+**Office:** Scott Hall 103
+:::
+
+## You {.center}
+
+- Name
+- Pronouns
+- Discipline + subfield/research area
+- Would you rather be covered in feathers or scales?
+
+# Course overview
+
+## Important links
+
+**Syllabus and slides:** [gustavodiaz.org/ps490ml](https://gustavodiaz.org/ps490ml/)
+
+**Assignments:** [canvas.northwestern.edu/courses/245570](https://canvas.northwestern.edu/courses/245570)
+
+**Meetings:** [cal.com/gustavodiaz](https://cal.com/gustavodiaz/)
+
+## Textbooks
+
+![](img/esl.png){fig-align="center" width=40%}
+
+::: aside
+<https://hastie.su.domains/ElemStatLearn/> (broken as of Jan 6, 2026)
+:::
+
+## Textbooks
+
+![](img/isl.png){fig-align="center" width=79%}
+
+::: aside
+<https://www.statlearning.com>
+:::
+
+## Recommended 
+
+![](https://www.tmwr.org/images/cover.png){fig-align="center" width=45%}
+
+::: aside
+<https://www.tmwr.org>
+:::
+
+## Assignments
+
+1. Participation
+
+2. Explorations (3)
+
+3. Collaborative note taking contributions (number TBD)
+
+4. Final project: Data and methods paper
+
+. . .
+
+**Grading**
+
+- Paper: *outstanding, satisfactory, unsatisfactory, failed*
+- Everything else: *satisfactory, unsatisfactory, failed*
+
+
+::: aside
+See syllabus for letter grade conversion
+:::
+# Questions?
