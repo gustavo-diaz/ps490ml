@@ -25,7 +25,7 @@ fontsize: 12pt
 )[
 *Instructor:* Gustavo Diaz (#link("gustavo.diaz@northwestern.edu")) \
 *Class:* Thursdays 2:00 -- 4:50pm, Scott Hall 212 \
-*Canvas:* TBD \
+*Canvas:* #link("https://canvas.northwestern.edu/courses/245570")[canvas.northwestern.edu/courses/245570] \
 *Meetings:* Schedule appointment (#link("https://cal.com/gustavodiaz/")[cal.com/gustavodiaz/]) \
 *Office:* Scott Hall 103
 ]
