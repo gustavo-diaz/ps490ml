@@ -210,7 +210,7 @@ Assistant Professor of Instruction in Political Science
 ![](img/esl.png){fig-align="center" width=40%}
 
 ::: aside
-<https://hastie.su.domains/ElemStatLearn/> (broken as of Jan 6, 2026)
+<https://hastie.su.domains/ElemStatLearn/>
 :::
 
 ## Textbooks
