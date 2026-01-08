@@ -228,16 +228,14 @@ This course follows the [Northwestern University Syllabus Standards](https://www
 
 <!-- - TM Chapters 1-3 -->
 
-@. Breiman, Leo. 2001. ["Statistical Modeling: The Two Cultures (with comments and a rejoinder by the author)."](https://doi.org/10.1214/ss/1009213726) *Statistical Science* 16 (3): 199-231
+1\. Breiman, Leo. 2001. ["Statistical Modeling: The Two Cultures (with comments and a rejoinder by the author)."](https://doi.org/10.1214/ss/1009213726) *Statistical Science* 16 (3): 199-231
 
 @. Daoud, Adel and Devdatt Dubhashi. 2020. ["Statistical modeling: the three cultures."](https://doi.org/10.48550/arXiv.2012.04570)
 
 ## Week 2 (January 15): Regression {#w2}
 
 
-@. ISL Chapters 2-3
-
-@. ESL Chapters 2-3.2
+@. ISL Chapters 2-3; ESL Chapters 2-3.2
 
 <!-- @. TM Chapters 4-8 -->
 
@@ -245,9 +243,7 @@ This course follows the [Northwestern University Syllabus Standards](https://www
 
 ## Week 3 (January 22): Classification {#w3}
 
-@. ISL Chapters 4, 9
-
-@. ESL Chapter 4, 12, 13
+@. ISL Chapters 4, 9; ESL Chapter 4, 12, 13
 
 @. Gründler, Klaus and Tommy Krieger. 2016. ["Democracy and growth: Evidence from a machine learning indicator."](https://doi.org/10.1016/j.ejpoleco.2016.05.005) *European Journal of Political Economy* 45 (Supplement): 85-107
 
@@ -258,9 +254,7 @@ This course follows the [Northwestern University Syllabus Standards](https://www
   
 ## Week 4 (January 29): Validation, selection, regularization {#w4}
 
-@. ISL Chapters 5-6
-
-@. ESL Chapter 3.3-3.9, 7
+@. ISL Chapters 5-6; ESL Chapter 3.3-3.9, 7
 
 <!-- @. TM Chapters 9-15 -->
 
@@ -275,9 +269,7 @@ This course follows the [Northwestern University Syllabus Standards](https://www
 
 ## Week 5 (February 5): Tree-based methods {#w5}
 
-@. ISL Chapter 8
-
-@. ESL Chapters 9-10, 15
+@. ISL Chapter 8; ESL Chapters 9-10, 15
 
 @. Montgomery, Jacob M. and Santiago Olivella. 2018. ["Tree-Based Models for Political Science Data."](https://doi.org/10.1111/ajps.12361) *American Journal of Political Science* 62 (3): 729-744
 
@@ -287,9 +279,7 @@ This course follows the [Northwestern University Syllabus Standards](https://www
 
 ## Week 6 (February 12): Neural networks {#w6}
 
-@. ISL Chapter 10
-
-@. ESL Chapter 11
+@. ISL Chapter 10; ESL Chapter 11
 
 @. Torres, Michelle and Francisco Cantú. 2022. ["Learning to See: Convolutional Neural Networks for the Analysis of Social Science Data."](https://doi.org/10.1017/pan.2021.9) *Political Analysis* 30 (1): 113-131
 
@@ -323,9 +313,7 @@ This course follows the [Northwestern University Syllabus Standards](https://www
 
 ## Week 8 (February 26): Unsupervised learning {#w8}
 
-@. ISL Chapter 12
-
-@. ESL Chapter 14
+@. ISL Chapter 12; ESL Chapter 14
 
 @. Ahlquist, John S. and Christian Breunig. 2012. ["Model-based Clustering and Typologies in the Social Sciences."](https://doi.org/10.1093/pan/mpr039) *Political Analysis* 20 (1): 92-112
 
