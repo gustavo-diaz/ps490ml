@@ -1,0 +1,219 @@
+---
+title: | 
+       | Regression
+subtitle: "POLI_SCI 490"
+author: "Machine Learning in Political Science"
+format: 
+  revealjs:
+    center: true
+    slide-number: false
+    progress: false
+    code-overflow: wrap
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.pos = "center")
+
+# Packages
+library(tidyverse)
+library(tidymodels)
+library(tinytable)
+```
+
+## Plan for today
+
+**Talk about**
+
+- Your thoughts
+- Supervised learning
+- Regression (tasks)
+- Linear regression (algorithm)
+- KNN (algorithm)
+- Bias-variance tradeoff
+
+**Coding**
+
+- Linear regression and KNN in `{tidymodels}`
+
+## Big picture
+
+![](https://workshops.tidymodels.org/slides/images/ml_illustration.jpg){fig-align="center"}
+
+# What is *supervised learning*?
+
+# Why is it called *supervised* learning?
+
+## Different language
+
+```{r}
+variables = tribble(
+  ~`Statistical inference`, ~`Supervised learning`,
+  "Outcome variable", "Response, output",
+  "Explanatory variable", "Predictor, input, feature",
+  "Model", "Algorithm",
+  "Uncertainty", "Error"
+)
+
+variables %>% tt()
+```
+
+# What is supervised learning useful for?
+
+## Supervised learning approaches
+
+. . .
+
+**Parametric:** Assumes functional form
+
+. . .
+
+**Non-parametric:** Does not assume functional form
+
+
+- **ESL:** They all assume chosen algorithm is a reasonable approximation to DGP
+
+## Linear Regression
+
+**Ordinary Least Squares (OLS)**
+
+. . .
+
+Function  $\widehat{g} = \widehat \beta_0 + \widehat \beta_1 X_{[1]} + \widehat \beta_2 X_{[2]} + \ldots + \widehat \beta_K X_{[K]}$
+
+. . .
+
+Such that
+
+$$
+\mathbf{\widehat \beta} = (\widehat\beta_0, \widehat\beta_1, \ldots, \widehat\beta_K) = \underset{(b_0, b_1, \ldots, b_K) \in \mathbb{R}^{K + 1}}{\text{argmin}} \frac{1}{n} \sum_{i = 1}^n e_i^2
+$$
+
+
+
+## Linear Regression
+
+**Ordinary Least Squares (OLS)**
+
+Remember this?
+
+$$
+SSR = \sum_{i=1}^n (y_i - \widehat y_i)^2
+$$
+
+. . . 
+
+It's our friend the **Sum of Squared Residuals**!
+
+. . .
+
+You used to be a *criterion* to minimize so that we could draw good lines
+
+. . .
+
+Now you are an **error metric**
+
+## Linear Regression
+
+**Ordinary Least Squares (OLS)**
+
+$$
+SSR = \sum_{i=1}^n (y_i - \widehat y_i)^2
+$$
+
+But not with those clothes!
+
+## Linear Regression
+
+**Ordinary Least Squares (OLS)**
+
+$$
+MSE = \frac{\sum_{i=1}^n (y_i - \widehat y_i)^2}{N}
+$$
+
+But not with those clothes!
+
+. . .
+
+Now you are a **Mean Squared Error**
+
+. . .
+
+But you could look prettier!
+
+## Linear Regression
+
+**Ordinary Least Squares (OLS)**
+
+$$
+RMSE = \sqrt{\frac{\sum_{i=1}^n (y_i - \widehat y_i)^2}{N}} 
+$$
+
+. . .
+
+You are a **Root Mean Squared Error**
+
+. . .
+
+You are now expressed on *response variable* units {{< fa heart >}}
+
+. . .
+
+{{< fa arrow-down >}} RMSE $\Rightarrow$ Better prediction
+
+## Notice
+
+RMSE can be used for any regression task
+
+. . .
+
+$$
+RMSE = \sqrt{\frac{\sum_{i=1}^n (y_i - \widehat y_i)^2}{N}} 
+$$
+
+## Notice
+
+RMSE can be used for any regression task
+
+$$
+RMSE = \sqrt{\frac{\sum_{i=1}^n (\text{actual} - \text{predicted})^2}{N}} 
+$$
+
+. . .
+
+And nearly every error metric in regression is a function of *SSR*
+
+## Notice
+
+RMSE can be used for any regression task
+
+$$
+RMSE = \sqrt{\frac{\text{SSR}}{N}} 
+$$
+
+And nearly every error metric in regression is a function of *SSR*
+
+## Examples
+
+. . .
+
+**Residual Standard Error**
+
+$$
+\text{RSE} = \sqrt{\frac{1}{n-2} \text{SSR}}
+$$
+
+. . .
+
+**$R^2$ statistic**
+
+$$
+R^2 = 1 - \frac{\text{SSR}}{\text{TSS}}; \text{ where } TSS = \sum (y_i - \bar y)^2
+$$
+
+# K-Nearest Neighbors
+
+[CONTINUE HERE MOTIVATION]
+
