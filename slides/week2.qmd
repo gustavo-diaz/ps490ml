@@ -9,10 +9,11 @@ format:
     slide-number: false
     progress: false
     code-overflow: wrap
+    code-line-numbers: false
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, 
+knitr::opts_chunk$set(echo = TRUE, 
                       warning = FALSE,
                       message = FALSE,
                       fig.pos = "center")
@@ -21,9 +22,15 @@ knitr::opts_chunk$set(echo = FALSE,
 library(tidyverse)
 library(tidymodels)
 library(tinytable)
+
+# ggplot global options
+theme_set(theme_gray(base_size = 20))
+
+# Colors
+nu_purple =  "#4E2A84"
 ```
 
-## Plan for today
+## Plan for today {.smaller}
 
 **Talk about**
 
@@ -36,19 +43,16 @@ library(tinytable)
 
 **Coding**
 
-- Linear regression and KNN in `{tidymodels}`
+- Linear regression in `{tidymodels}`
+- KNN if we have time
 
 ## Big picture
 
 ![](https://workshops.tidymodels.org/slides/images/ml_illustration.jpg){fig-align="center"}
 
-# What is *supervised learning*?
-
-# Why is it called *supervised* learning?
-
 ## Different language
 
-```{r}
+```{r, echo = FALSE}
 variables = tribble(
   ~`Statistical inference`, ~`Supervised learning`,
   "Outcome variable", "Response, output",
@@ -60,7 +64,16 @@ variables = tribble(
 variables %>% tt()
 ```
 
+# What is *supervised learning*?
+
+# Why is it called *supervised* learning?
+
+
 # What is supervised learning useful for?
+
+## Morucci and Spirling (2024) 
+
+![](img/meme.jpeg){fig-align="center"}
 
 ## Supervised learning approaches
 
@@ -72,6 +85,7 @@ variables %>% tt()
 
 **Non-parametric:** Does not assume functional form
 
+. . .
 
 - **ESL:** They all assume chosen algorithm is a reasonable approximation to DGP
 
@@ -215,5 +229,350 @@ $$
 
 # K-Nearest Neighbors
 
-[CONTINUE HERE MOTIVATION]
+## Toy example
+
+```{r cookies-base, echo = FALSE, fig.align="center"}
+cookies <- tibble(happiness = c(0.5, 2, 1, 2.5, 3, 1.5, 2, 2.5, 2, 3),
+                  cookies = 1:10)
+
+cookies_data <- cookies
+cookies_model <- lm(happiness ~ cookies, data = cookies)
+cookies_fitted <- augment(cookies_model)
+
+cookies_base <- ggplot(cookies_fitted, aes(x = cookies, y = happiness)) +
+  geom_point(size = 3) +
+  coord_cartesian(xlim = c(0, 10), ylim = c(0, 3)) +
+  scale_x_continuous(breaks = 0:10) +
+  labs(x = "Cookies eaten", y = "Level of happiness")
+
+cookies_base
+```
+
+. . .
+
+How happy will the next person be?
+
+## They eat 5 cookies
+
+```{r, fig.align='center', echo = FALSE}
+cookies_base +
+  geom_vline(xintercept = 5, 
+             linewidth = 2,
+             linetype = "dashed", 
+             color = nu_purple)
+```
+
+How happy will the next person be?
+
+## They eat 5 cookies
+
+```{r, fig.align='center', echo = FALSE}
+cookies_base +
+  geom_vline(xintercept = 5, 
+             linewidth = 2,
+             linetype = "dashed", 
+             color = nu_purple)
+```
+
+We already know one way
+
+## Drawing lines!
+
+```{r cookies-spline, echo = FALSE}
+c1 = cookies_base +
+  geom_smooth(method = lm, color = nu_purple, formula = y ~ splines::bs(x, 7), se = FALSE)
+
+c1
+```
+
+## Drawing lines!
+
+```{r cookies-loess, echo = FALSE}
+c2 = cookies_base +
+  geom_smooth(method = "loess", color = nu_purple, se = FALSE)
+
+c2
+```
+
+## Drawing lines!
+
+```{r cookies-lm, echo = FALSE}
+c3 =cookies_base +
+  geom_smooth(method = "lm", color = nu_purple, se = FALSE)
+
+c3
+```
+
+## Nonparametric approach
+
+```{r, fig.align='center', echo = FALSE}
+cookies_base +
+  geom_vline(xintercept = 5, 
+             linewidth = 2,
+             linetype = "dashed", 
+             color = nu_purple)
+```
+
+What would be a good guess for the new person?
+
+## Nonparametric approach
+
+```{r, fig.align='center', echo = FALSE}
+cookies <- tibble(happiness = c(0.5, 2, 1, 2.5, 3, 1.5, 2, 2.5, 2, 3),
+                  cookies = 1:10)
+
+cookies$nb = c(0, 0, 0, 1, 1, 1, 0, 0, 0, 0)
+
+cookies_nb = ggplot(cookies) +
+  aes(x = cookies, 
+      y = happiness,
+      color = as.factor(nb)) +
+      geom_vline(xintercept = 5, 
+             linewidth = 2,
+             linetype = "dashed", 
+             color = nu_purple) +
+  geom_point(size = 3) +
+  coord_cartesian(xlim = c(0, 10), ylim = c(0, 3)) +
+  scale_x_continuous(breaks = 0:10) +
+  scale_color_manual(values = c("black", "green")) +
+  labs(x = "Cookies eaten", y = "Level of happiness") +
+  theme(legend.position = "none")
+  
+cookies_nb
+```
+
+Observations nearby!
+
+## KNN Regression algorithm
+
+$$
+\widehat Y(x) = \frac{1}{k} \sum_{x_i \in N_k(x) y_i} 
+$$
+
+Where $N_k (x)$ is the neighborhood of $x$ defined by the $k$ closest neighbors in the training sample.
+
+## How to choose K?
+
+![](img/knn_tune.png){fig-align="center"}
+
+## Pros and cons
+
+. . .
+
+**Linear regression:** Stable but inaccurate
+
+**KNN**: Accurate but prone to instability
+
+## Pros and cons
+
+**Linear regression:** Low variance, high bias
+
+**KNN**: Low bias, high variance
+
+. . .
+
+Both methods suffer in high dimensions!
+
+## Bias-variance tradeoff
+
+![](img/bias_variance_2.png){fig-align="center"}
+
+## Bias-variance tradeoff
+
+![](img/bias_variance.png){fig-align="center"}
+
+
+## Another important tradeoff
+
+![](img/inter_flex.png){fig-align="center"}
+
+# Coding
+
+## Data
+
+```{r}
+library(ISLR)
+
+Wage
+```
+
+
+::: aside
+<https://cran.r-project.org/web/packages/ISLR/refman/ISLR.html#Wage>
+:::
+
+## Clean up
+
+```{r}
+w = Wage %>% 
+  select(!c(logwage, region)) %>% 
+  mutate(year = as.factor(year))
+```
+
+## Linear regression
+
+
+Fit model
+
+```{r}
+lm_fit = lm(wage ~ ., data = w)
+```
+
+. . .
+
+Predict new outcomes based on model
+
+```{r}
+yhat_lm = predict(lm_fit, newdata = w)
+```
+
+. . .
+
+Evaluate fit
+
+```{r}
+sqrt(mean((w$wage - yhat_lm)^2))
+```
+
+. . .
+
+```{r}
+summary(w$wage)
+```
+
+## KNN
+
+```{r}
+library(caret)
+
+knn_fit = knn3(wage ~ ., data = w, k = 5)
+
+yhat_knn = predict(knn_fit, newdata = w)
+
+sqrt(mean((w$wage - yhat_knn)^2))
+```
+
+## Challenge
+
+Different algorithms have different syntax
+
+. . .
+
+We want a workflow that unifies (and eventually combines) across algorithms
+
+## `{tidymodels}` approach
+
+Load package
+
+```{r}
+library(tidymodels)
+```
+
+. . .
+
+Algorithm = engine
+
+```{r}
+linear_reg()
+```
+
+## `{tidymodels}` approach
+
+Load package
+
+```{r}
+library(tidymodels)
+```
+
+Algorithm = engine
+
+```{r}
+linear_reg() %>% set_engine("lm")
+```
+
+## `{tidymodels}` approach
+
+Load package
+
+```{r}
+library(tidymodels)
+```
+
+Algorithm = engine
+
+```{r}
+linear_reg() %>% set_engine("lm") %>% translate()
+```
+
+## Apply
+
+Set engine
+
+```{r}
+lm_model = linear_reg()
+```
+
+## Apply
+
+Set engine
+
+```{r}
+lm_model = linear_reg() %>% set_engine("lm")
+```
+
+## Apply
+
+Set engine
+
+```{r}
+lm_model = linear_reg() %>% set_engine("lm")
+```
+
+. . .
+
+Fit
+
+```{r}
+lm_fit = lm_model %>% 
+  fit(wage ~ ., data = w)
+```
+
+
+. . .
+
+Check 
+
+```{r}
+lm_fit %>% extract_fit_engine()
+```
+
+
+## Extract predictions
+
+Tidy approach
+
+```{r}
+w %>% 
+  select(wage) %>% 
+  bind_cols(predict(lm_fit, w))
+```
+
+
+
+## Evaluate fit (for now)
+
+```{r}
+w %>% 
+  select(wage) %>% 
+  bind_cols(predict(lm_fit, w)) %>% 
+  mutate(
+    sq_res = (wage - .pred)^2
+  ) %>% 
+  summarize(
+    SSR = sum(sq_res),
+    MSE = mean(sq_res),
+    RMSE = sqrt(mean(sq_res))
+  )
+```
+
 
