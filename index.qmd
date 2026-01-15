@@ -13,7 +13,7 @@ Click [here](/syllabus.pdf) for the most recent version.
 
 [Week 1: Introduction](slides/week1.html)
 
-[Week 2: Regression](slides/week1.html)
+[Week 2: Regression](slides/week2.html)
 
 Week 3: Classification
 
