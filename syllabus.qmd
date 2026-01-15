@@ -174,7 +174,7 @@ You are required to schedule a meeting with me to discuss the topic of your repl
 
 Collaboration with people inside or outside the class is allowed with instructor approval.
 
-Final papers are due on TBD at 9AM. You should submit your paper in PDF format through Canvas. Your paper should follow the format of a research note, up to 4,000 words. You are also required to submit a link to a GitHub or Code Ocean repository (or equivalent) including all the code used to reproduce your tables, figures, and calculations. You may also include less important details in the appendix to keep the paper concise. You can read more about research notes in political science [here](https://resulumit.com/blog/polisci-research-notes/).
+Final papers are due on Wednesday, March 18 at 9AM. You should submit your paper in PDF format through Canvas. Your paper should follow the format of a research note, up to 4,000 words. You are also required to submit a link to a GitHub or Code Ocean repository (or equivalent) including all the code used to reproduce your tables, figures, and calculations. You may also include less important details in the appendix to keep the paper concise. You can read more about research notes in political science [here](https://resulumit.com/blog/polisci-research-notes/).
 
 Your final paper will be marked as *outstanding*, *satisfactory*, *unsatisfactory*, or *failed*. You are also welcome to resubmit a final paper marked as unsatisfactory at any point, but that means I will not be able to update your grade until after the final grade report deadline. I encourage submitting an incomplete paper over asking for an incomplete course grade.
 
