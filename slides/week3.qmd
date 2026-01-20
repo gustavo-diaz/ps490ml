@@ -1,0 +1,50 @@
+---
+title: | 
+       | Classification
+subtitle: "POLI_SCI 490"
+author: "Machine Learning in Political Science"
+format: 
+  revealjs:
+    center: true
+    slide-number: false
+    progress: false
+    code-overflow: wrap
+    code-line-numbers: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.pos = "center")
+
+# Packages
+library(tidyverse)
+library(tidymodels)
+library(tinytable)
+
+# ggplot global options
+theme_set(theme_gray(base_size = 20))
+
+# Colors
+nu_purple =  "#4E2A84"
+```
+
+## Plan for today
+
+**Talk about**
+
+- (Some) metrics for binary classification
+- Generative models
+- Support vector machines
+- Application readings
+
+**Coding**
+
+- Supervised learning pipeline in `{tidymodels}`
+
+
+## Big picture
+
+![](https://workshops.tidymodels.org/slides/images/ml_illustration.jpg){fig-align="center"}
+
