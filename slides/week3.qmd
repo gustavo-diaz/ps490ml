@@ -399,3 +399,5 @@ In the whiteboard
 # Applications
 
 # Coding
+
+<https://github.com/gustavo-diaz/ps490ml/blob/main/scripts/pipeline.qmd>
