@@ -41,7 +41,7 @@ nu_purple =  "#4E2A84"
 
 **Coding**
 
-- Supervised learning pipeline in `{tidymodels}`
+- Supervised learning workflow in `{tidymodels}`
 
 
 ## Big picture

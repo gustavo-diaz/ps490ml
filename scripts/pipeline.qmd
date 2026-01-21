@@ -1,0 +1,225 @@
+---
+title: "A `{tidymodels}` supervised learning workflow"
+author: "POLI_SCI 490: Machine Learning in Political Science"
+format: html
+---
+
+## Setup
+
+This draws heavily from [this tutorial](https://www.tidymodels.org/start/recipes/#data-split) and the [Tidy Modeling with R](https://www.tmwr.org) book.
+
+First, we install the required packages.
+
+```{r, warning = FALSE, message = FALSE}
+library(tidyverse) # data management
+library(tidymodels) # ML workflow
+library(ISLR) # data
+```
+
+
+## Data
+
+We will work with the `Default` data from the `{ISLR}` package.
+
+```{r}
+data(Default) # Optional step to attach in environment
+
+Default %>% head() # explore
+```
+
+We will focus on `default` as the outcome to predict. This is a binary variable indicating whether an individual's credit card has defaulted. A credit card defaults when you miss minimum payment by 30 days or more.
+
+We will use the following features to predict `default`:
+
+- `balance:` Average balance remaining on the credit card after their monthly payment
+
+- `income:` Income of customer (yearly?)
+
+
+In a typical data analysis pipeline, you would preprocess the data *before* fitting any kind of model. An important part of the `{tidymodels}` ML workflow is that the preprocessing should be considered part of the model. Similarly, post-modeling data processing should also be included as part of the model as a whole.
+
+The purpose of this approach is to minimize mistakes once we apply the model to the test data. Also, this will help as our pipelines become more complex, especially when it comes to aggregating or averaging predictions across models. The following figure shows an example:
+
+![](https://www.tmwr.org/premade/proper-workflow.svg)
+
+## Presets
+
+Since tidymodels incorporates many different algorithms, you may run into conflicts with other ML packages. An optional quality of life step is to use the `tidymodels_prefer()` function to instruct R to default to tidymodels in case of conflicts. You can always override this option by using the `::` operator in specific cases.
+
+```{r}
+tidymodels_prefer() # quiet = TRUE by default
+```
+
+## Train/test split
+
+Before fitting any models, we split the data into training and test sets. If there is no natural test set to work with, the usual place to start is a random split.
+
+```{r}
+set.seed(20260122) # Fix RNG
+
+# 90/10 split
+data_split = initial_split(Default, prop = 0.9)
+
+# Create dfs for training and test
+train_df = training(data_split)
+
+test_df = testing(data_split)
+
+test_df
+```
+
+## Create recipe
+
+Before fitting a model, we create a *recipe*. The idea is that we will pre-specify our predictors and any required pre-processing so that they remain the same even if we change the model.
+
+```{r}
+rec = recipe(
+  default ~ balance + income,
+  data = train_df
+)
+```
+
+Note that you could more than one variable in the left-hand side, in which case you would have multiple outcomes.
+
+As an optional step, you could also create **roles** as part of the recipe. This could be helpful to identify things like an ID variable.
+
+Here's an example:
+
+```{r}
+# create an ID variable since OG data doesn't have one
+def = Default %>% 
+  mutate(id = 1:nrow(.)) %>% 
+  select(!student)
+
+
+# Repeat the train/test split
+set.seed(20260122) # Fix RNG
+
+data_split = initial_split(def, prop = 0.9)
+
+train_df = training(data_split)
+
+test_df = testing(data_split)
+```
+
+Repeat the recipe, now with a role for the id variable.
+
+```{r}
+rec = recipe(
+  default ~ . ,
+  data = train_df
+) %>% 
+  update_role(
+    id, new_role = "ID"
+  )
+```
+
+We can use the `summary()` function to check the elements of our recipe.
+
+```{r}
+summary(rec)
+```
+
+If you were to add additional pre-processing steps, you would apply those to the **recipe** instead of the data itself. For example, a standard practice with categorical predictors is converting each of them into an indicator variable.
+
+## Fit a model with a recipe
+
+First, build the model specification with the `{parsnip}` package. This time, we will do logistic regression, but you can change this to any algorithm (even many at once!)
+
+```{r}
+# glm is the default for logit anyway
+# but it pays to be explicit
+logit = logistic_reg() %>% 
+  set_engine("glm")
+```
+
+To fit the model to a recipe, we first create a **workflow**
+
+```{r}
+wflow = workflow() %>%
+  add_model(logit) %>%
+  add_recipe(rec)
+
+wflow
+```
+
+And then fit *the whole workflow* to the training data.
+
+```{r}
+logit_fit = wflow %>% 
+  fit(data = train_df)
+```
+
+You can extract specific elements of a model fit in tidy format if you need to.
+
+```{r}
+logit_fit %>%
+  extract_fit_parsnip() %>% 
+  tidy()
+```
+
+## Predict test data
+
+Now that we have *trained* our model, we can predict our test data.
+
+```{r}
+predict(logit_fit, test_df)
+```
+
+Since we are doing binary prediction, we can also predict class probabilities in case we wanted to change the decision threshold.
+
+```{r}
+predict(logit_fit, test_df, type = "prob")
+```
+
+We can `augment` the test data with these predictions.
+
+```{r}
+test_aug =
+  augment(logit_fit, test_df)
+
+test_aug
+```
+
+## Evaluate
+
+The final step is to evaluate accuracy with our preferred metric. We will expand on this next week.
+
+```{r}
+test_aug %>% 
+  metrics(
+    truth = default, 
+    .pred_class)
+```
+
+The `metrics` function ill give you whatever metric is the default given your task (regression or classification). You can also use specific metrics.
+
+```{r}
+test_aug %>% 
+  sens(
+    truth = default,
+    .pred_class
+  )
+```
+
+```{r}
+test_aug %>% 
+  spec(
+    truth = default,
+    .pred_class
+  )
+```
+
+You can also pre-specify your metrics.
+
+```{r}
+class_metrics = metric_set(
+  accuracy, kap, sensitivity, specificity
+)
+
+test_aug %>% 
+  class_metrics(
+    truth = default, 
+    estimate = .pred_class)
+```
+
