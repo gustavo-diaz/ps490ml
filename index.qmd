@@ -15,7 +15,7 @@ Click [here](/syllabus.pdf) for the most recent version.
 
 [Week 2: Regression](slides/week2.html)
 
-Week 3: Classification
+[Week 3: Classification](slides/week3.html)
 
 Week 4: Validation, selection, regularization
 

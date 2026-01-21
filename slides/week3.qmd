@@ -22,6 +22,8 @@ knitr::opts_chunk$set(echo = TRUE,
 library(tidyverse)
 library(tidymodels)
 library(tinytable)
+library(kableExtra)
+library(marginaleffects)
 
 # ggplot global options
 theme_set(theme_gray(base_size = 20))
@@ -48,3 +50,352 @@ nu_purple =  "#4E2A84"
 
 ![](https://workshops.tidymodels.org/slides/images/ml_illustration.jpg){fig-align="center"}
 
+# Classification
+
+## Running example: `Default` data
+
+```{r}
+library(ISLR)
+
+Default
+```
+
+## Logistic regression
+
+```{r}
+Default$default01 = ifelse(
+  Default$default == "Yes", 1, 0
+  )
+
+logit = glm(
+  default01 ~ student + balance + income, 
+  data = Default, family = binomial
+  )
+```
+
+## Visualize
+
+```{r, echo = FALSE, fig.align='center'}
+ols = lm(default01 ~ student + balance + income, data = Default)
+
+p_ols = plot_predictions(ols,
+                 condition = "balance",
+                 draw = FALSE)
+
+p_log = plot_predictions(logit,
+                         condition = "balance",
+                         draw = FALSE)
+
+# Combine and label
+pred_df = bind_rows(
+  p_ols %>% mutate(Model = "OLS"),
+  p_log %>% mutate(Model = "Logit")
+)
+
+# Visualize
+ggplot(Default) +
+  aes(x = balance, y = default01) +
+  geom_jitter(alpha = 0.3, height = 0.1) +
+  geom_line(
+    data = pred_df,
+    aes(x = balance, 
+        y = estimate,
+        color = Model),
+    linewidth = 2) +
+  scale_y_continuous(limits = c(0,1)) +
+  scale_color_viridis_d(begin = 0, end = 0.8) +
+  labs(x = "Balance",
+       y = "Pr(Default)")
+```
+
+. . .
+
+How do you classify?
+
+## Confusion matrix
+
+```{r, echo = FALSE}
+confusion = tribble(
+  ~Predicted, ~`False (0)`, ~`True (1)`,
+  "False (0)", "True Negative (**TN**)", "False Negative (**FN**)",
+  "True (1)", "False Positive (**FP**)", "True Positive (**TP**)"
+  
+)
+
+confusion %>% tt() %>% 
+  format_tt(j = 2:3, markdown = TRUE) %>% 
+  group_tt(
+    j = list(
+      "Actual" = 2:3
+    )
+  )
+```
+
+## Classification metrics
+
+```{r, results='asis', echo = FALSE}
+class_metrics = tribble(
+  ~Name, ~Measurement, ~Note,
+  "Error rate", "$Avg(I(y_i \\neq \\widehat{y}_i))$",
+  "Proportion actual $\\neq$ predicted",
+  "Accuracy", "$1 - \\text{error rate}$", "Proportion correct",
+  "Accuracy", "$(TN + TP)/n$", "Proportion correct",
+  "Sensitivity", "$TP/(TP+FN)$", "Proportion correct positives",
+  "Specificity", "$TN/(TN+FP)$", "Proportion correct negatives"
+  
+  
+)
+
+
+tab0 = class_metrics %>% 
+  kbl() %>% 
+  kable_styling(font_size = 35) %>% 
+  row_spec(1:5, color = "#00000000")
+
+cat(tab0)
+```
+
+
+## Classification metrics
+
+```{r, results='asis', echo = FALSE}
+tab1 = class_metrics %>% 
+  kbl() %>% 
+  kable_styling(font_size = 35) %>% 
+  row_spec(2:5, color = "#00000000")
+
+cat(tab1)
+```
+
+## Classification metrics
+
+
+```{r, results='asis', echo = FALSE}
+tab2 = class_metrics %>% 
+  kbl() %>% 
+  kable_styling(font_size = 35) %>% 
+  row_spec(3:5, color = "#00000000")
+
+cat(tab2)
+```
+
+
+
+## Classification metrics
+
+
+```{r, results='asis', echo = FALSE}
+tab3 = class_metrics %>% 
+  kbl() %>% 
+  kable_styling(font_size = 35) %>% 
+  row_spec(4:5, color = "#00000000")
+
+cat(tab3)
+```
+
+## Classification metrics
+
+
+```{r, results='asis', echo = FALSE}
+tab4 = class_metrics %>% 
+  kbl() %>% 
+  kable_styling(font_size = 35) %>% 
+  row_spec(5, color = "#00000000")
+
+cat(tab4)
+```
+
+## Classification metrics
+
+
+```{r, results='asis', echo = FALSE}
+tab5 = class_metrics %>% 
+  kbl() %>% 
+  kable_styling(font_size = 35)
+
+cat(tab5)
+```
+
+# Generative Models
+
+## Main idea
+
+. . .
+
+Logistic regression predicts class by modeling probabilities
+
+. . .
+
+**Bayes theorem:** Break down probability into parts
+
+$$
+Pr(Y = k | X = x) = \frac{\pi_k f_k(x)}{\sum_{l=1}^{K} \pi_l f_l(x)}
+$$
+
+## Main idea
+
+Logistic regression predicts class by modeling probabilities
+
+**Bayes theorem:** Break down probability into parts
+
+$$
+\text{Posterior} = \frac{\text{Prior} \times \text{Likelihood}}{\text{Normalizing constant}}
+$$
+
+. . .
+
+Instead of modeling **posterior** probability directly, model **likelihood** instead
+
+. . .
+
+Why?
+
+## Another way to think about it
+
+. . .
+
+**Bayes classifier:** Assign classes based on underlying probability distribution in DGP
+
+. . .
+
+**Generative models:** Estimate a model that approximates the Bayes classifier
+
+. . .
+
+Need to make **assumptions** about DGP
+
+## Linear Discriminant Analysis (LDA)
+
+We are modeling
+
+$$
+Pr(Y = k | X = x) = \frac{\pi_k \boldsymbol{f_k(x)}}{\sum_{l=1}^{K} \pi_l f_l(x)}
+$$
+
+. . .
+
+Assume $X | Y = k \sim N(\mu_k, \Sigma)$
+
+. . .
+
+Then estimate
+
+$$
+\boldsymbol{f_k(x)} = \frac{1}{\sqrt{2\pi\Sigma}} \text{exp}\left(-\frac{1}{2\Sigma^2} (x-\mu_k)^2\right)
+$$
+
+
+## Quadratic Discriminant Analysis (QDA)
+
+We are modeling the same thing
+
+$$
+Pr(Y = k | X = x) = \frac{\pi_k \boldsymbol{f_k(x)}}{\sum_{l=1}^{K} \pi_l f_l(x)}
+$$
+
+. . .
+
+Assume $X | Y = k \sim N(\mu_k, \Sigma_k)$
+
+. . .
+
+Then estimate
+
+$$
+\boldsymbol{f_k(x)} = \frac{1}{\sqrt{2\pi\Sigma_k}} \text{exp}\left(-\frac{1}{2\Sigma_k^2} (x-\mu_k)^2\right)
+$$
+
+## Naive Bayes
+
+We are modeling the same thing
+
+$$
+Pr(Y = k | X = x) = \frac{\pi_k \boldsymbol{f_k(x)}}{\sum_{l=1}^{K} \pi_l f_l(x)}
+$$
+
+. . .
+
+Assume $X | Y = k \sim N(\mu_k, \Sigma_k)$ again
+
+. . .
+
+And also $f_k(x) = f_{k1}(x_1) \times f_{k2}(x_2) \times \ldots \times f_{kp}(x_p)$ 
+
+## Naive Bayes
+
+We are modeling the same thing
+
+$$
+Pr(Y = k | X = x) = \frac{\pi_k \boldsymbol{f_k(x)}}{\sum_{l=1}^{K} \pi_l f_l(x)}
+$$
+
+
+Assume $X | Y = k \sim N(\mu_k, \Sigma_k)$ and $f_k(x) = \prod_{j=1}^{j=p} f_{kj}(x_j)$ 
+
+. . .
+
+Then estimate
+
+$$
+f_{kj}(x_j) = \frac{1}{\sigma_{kj}\sqrt(2\pi)} \text{exp} \left[-\frac{1}{2}\left( \frac{x_j - \mu_{kj}}{\sigma_{kj}}\right)^2\right]
+$$
+
+## How do you choose?
+
+. . .
+
+Bias
+
+## How do you choose?
+
+Bias-variance
+
+## How do you choose?
+
+Bias-variance tradeoff
+
+## How do you choose?
+
+[Bias-variance tradeoff]{style="font-size: 2.5em;"}
+
+## Summary {.smaller}
+
+:::: {.columns}
+
+::: {.column width="50%"}
+**LDA**
+
+- Shared covariance matrix across classes
+- Linear decision boundary
+- Low variance, high bias
+- Better for smaller datasets
+:::
+
+::: {.column width="50%"}
+**QDA**
+
+- Different covariance matrix for each class
+- Quadratic decision boundary
+- High variance, low bias
+- Needs big data
+:::
+::::
+
+**Naive Bayes**
+
+- Features are independent (diagonal covariance matrix)
+- Linear or curved decision boundary
+- Higher bias, lower variance
+- Good performance when $n$ is not large enough relative to $p$
+
+::: aside
+All models assume a *Gaussian* DGP!
+:::
+
+# Support Vector Machines
+
+In the whiteboard
+
+# Applications
+
+# Coding
