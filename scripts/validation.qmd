@@ -1,0 +1,292 @@
+---
+title: "Model selection and assessment
+author: "POLI_SCI 490: Machine Learning in Political Science"
+format: html
+---
+
+# Setup
+
+Install required packages.
+
+```{r, warning = FALSE, message = FALSE}
+library(tidyverse) # data management
+library(tidymodels) # ML workflow
+library(glmnet) # lasso, ridge
+library(ISLR) # data
+library(vip) # variable importance plot
+```
+
+
+# Data
+
+We will work with the [Online News Popularity](https://archive.ics.uci.edu/dataset/332/online+news+popularity) data set from the [UC Irvine machine learning repository](https://archive.ics.uci.edu).
+
+```{r}
+url = "https://raw.githubusercontent.com/gustavo-diaz/ps490ml/refs/heads/main/data/OnlineNewsPopularity.csv"
+
+online_news = read.csv(url) 
+```
+
+
+This data contains information about news articles from [mashable.com](https://mashable.com). The goal is to train a model that predicts the number of `shares` a news article will have.
+
+Per the documentation in the UCI repository, some of these variables are non-predictive, so we will take those out before beginning.
+
+```{r}
+news = online_news %>% 
+  select(
+    -url,
+    -timedelta
+    )
+```
+
+
+We will then divide the data in training and test sets.
+
+```{r}
+set.seed(20260129)
+
+# 80/20 split
+# Why do we need a test set if we are doing CV later?
+data_split = initial_split(news, prop = 0.8)
+
+train_df = training(data_split)
+test_df = testing(data_split)
+
+```
+
+
+# `{glmnet}` approach
+
+Annoyingly, `{glmnet}` does not use formula syntax.
+
+```{r}
+# matrix of predictors
+news_x = train_df %>% select(-shares)
+
+# outcome vector
+news_y = train_df$shares
+
+lasso_fit = glmnet(x = news_x,
+                   y = news_y,
+                   alpha = 1,
+                   nlambda = 100) # can also be grid
+
+plot(lasso_fit)
+```
+
+If you remember from reading ISL or ESL. The lasso and related methods need the predictors to be centered and scaled. `{glmnet}` does this by default under the hood.
+
+Some pockets of data science and industry consider centering and scaling a mandatory step in the machine learning workflow. If you already pre-processed your data in this way before fitting a model, then you should disable the default.
+
+But this is just fitting the lasso path, how do we tune $\lambda$?
+
+```{r}
+set.seed(20260129)
+
+lasso_cv = cv.glmnet(
+  x = as.matrix(news_x),
+  y = news_y,
+  alpha = 1,
+  nfolds = 10,
+  nlambda = 100
+  )
+
+# lambda.min is the one that minimizes mse
+lasso_cv$lambda.min
+
+# but what is this? 
+lasso_cv$lambda.1se
+
+# hmm
+plot(lasso_cv)
+```
+
+**Rule of thumb:** When doing CV to tune hyperparameters. DO NOT choose the parameters that minimize the error metric. Choose instead the most conservative one that falls within one standard error of the optimal parameter combination. 
+
+Why? We want to avoid overfitting!
+
+Now that we tuned $\lambda$, we can generate predictions for the test set.
+
+```{r}
+# Separate test set
+test_x = test_df %>% select(-shares) %>% as.matrix()
+test_y = test_df$shares
+
+# Evaluate in test set
+assess.glmnet(
+  lasso_fit,
+  newx = test_x,
+  newy = test_y,
+  s = lasso_cv$lambda.1se)
+```
+
+
+# `{tidymodels}` approach
+
+We already did the training/test split with the `{tidymodels}` syntax above. We continue with the next step here, drawing heavily from [Julia Silge's post](https://juliasilge.com/blog/lasso-the-office/).
+
+We start by declaring our recipe.
+
+```{r}
+rec = recipe(
+  shares ~ .,
+  data = train_df
+) %>% 
+  # Remove zero-variance numeric predictors (there is none but still)
+  step_zv(all_numeric(), -all_outcomes()) %>%
+  # Manually center and scale
+  step_normalize(all_numeric(), -all_outcomes())
+```
+
+Set the engine. More details here: <https://parsnip.tidymodels.org/reference/glmnet-details.html>
+
+```{r}
+tune_spec = linear_reg(
+  penalty = tune(),
+  mixture = 1
+) %>% 
+  set_engine("glmnet")
+
+# check
+tune_spec
+```
+
+The next step is to specify our resampling method. Options include bootstrap and cross-validation. I will use cross-validation here, but create both for the sake of exposition.
+
+```{r}
+set.seed(20260129)
+
+boot = bootstraps(train_df, times = 25)
+cv = vfold_cv(train_df, v = 10)
+
+boot
+cv
+
+# The magic here is that folds/resamples are stored as promises
+cv$splits
+```
+
+We also need a grid of lambdas to tune
+
+```{r}
+lambda_grid = grid_regular(penalty(), levels = 50)
+
+lambda_grid
+```
+
+Now we can create a workflow.
+
+```{r}
+wf = workflow() %>% 
+  add_recipe(rec) %>% 
+  add_model(tune_spec)
+```
+
+
+```{r}
+# Use more than one core
+# Details: 
+# https://cran.r-project.org/web/packages/doParallel/vignettes/gettingstartedParallel.pdf
+# https://www.appsilon.com/post/r-doparallel
+doParallel::registerDoParallel()
+
+set.seed(20261029)
+
+lasso_grid = tune_grid(
+  wf,
+  resamples = cv,
+  grid = lambda_grid
+)
+```
+
+Check the results
+
+```{r}
+lasso_grid %>% 
+  collect_metrics()
+```
+
+Can make a pretty plot.
+
+```{r}
+lasso_grid %>%
+  collect_metrics() %>%
+  ggplot(aes(penalty, mean, color = .metric)) +
+  geom_errorbar(aes(
+    ymin = mean - std_err,
+    ymax = mean + std_err
+  ),
+  alpha = 0.5
+  ) +
+  geom_line(linewidth = 1.5) +
+  facet_wrap(~.metric, scales = "free", nrow = 2) +
+  scale_x_log10() +
+  theme(legend.position = "none")
+```
+
+Our model is not particularly good it seems. Guesses?
+
+Still, we can pick out the combination of parameters that either minimizes the rmse or the largest one within one one standard deviation.
+
+```{r}
+lasso_grid %>%
+  show_best(metric = "rmse")
+
+lasso_best = lasso_grid %>% 
+  select_by_one_std_err(
+    metric = "rmse",
+    penalty
+  )
+```
+
+Then we finalize workflow
+
+```{r}
+final_lasso = finalize_workflow(
+  wf,
+  lasso_best
+)
+
+final_lasso
+```
+
+
+Before proceeding, this would be the part in which we go back and make changes to our workflow. Something like trying a richer parameter space for $\lambda$?
+
+It is ok to fiddle with your models while training. But do so BEFORE TOUCHING THE TEST DATA.
+
+## Evaluate in test data
+
+```{r}
+last_fit(
+  final_lasso,
+  data_split
+) %>%
+  collect_metrics()
+```
+
+
+## Bonus: Variable importance plot
+
+```{r}
+final_lasso %>%
+  fit(train_df) %>%
+  extract_fit_parsnip() %>%
+  vi(lambda = lasso_best$penalty) %>%
+  mutate(
+    Importance = abs(Importance),
+    Variable = fct_reorder(Variable, Importance)
+  ) %>%
+  ggplot(aes(x = Importance, y = Variable, fill = Sign)) +
+  geom_col() +
+  scale_x_continuous(expand = c(0, 0)) +
+  labs(y = NULL)
+```
+
+
+## Challenge: Reproduce the `{glmnet}` coefficient plot in tidymodels workflow
+
+## Idea for exploration: Deep dive into lasso, ridge, elastic net, grouped/hierarchical variants
+
+I would be interested to read some of your thoughts on uses/abuses of this method.
