@@ -32,6 +32,12 @@ theme_set(theme_gray(base_size = 20))
 nu_purple =  "#4E2A84"
 ```
 
+## Exploration ideas
+
+- Walk yourself through choosing the right tree-based method for your data
+
+- *From next week's material:* Teach yourself how to tune a pre-trained neural network (or similar model) in Python
+
 ## Plan for today
 
 **Digressions**
@@ -75,3 +81,201 @@ The idea comes from this blog post I stumbled upon: <https://notstatschat.rbind.
 ::: aside
 <https://doi.org/10.1038/s41586-024-07566-y>
 :::
+
+# Tree-Based Methods
+
+## Regression/classification trees
+
+![](img/trees.jpg){fig-align="center"}
+
+## Recursive binary partitioning
+
+![](img/recursive_1.jpg){fig-align="center"}
+
+## Recursive binary partitioning
+
+![](img/recursive_2.jpg){fig-align="center"}
+
+## Recursive binary partitioning
+
+![](img/recursive_3.jpg){fig-align="center"}
+
+## Recursive binary partitioning
+
+![](img/recursive_4.jpg){fig-align="center"}
+
+## Recursive binary partitioning
+
+![](img/recursive_5.jpg){fig-align="center"}
+
+## Recursive binary partitioning
+
+![](img/recursive_6.jpg){fig-align="center"}
+
+## Problems?
+
+. . .
+
+Deep trees overfit on the training data
+
+. . .
+
+Shallow trees have high bias
+
+. . .
+
+How to balance number of splits?
+
+## Cost complexity tuning
+
+```{=html}
+<p align="center"><iframe width="1000" height="600" src="https://www.youtube.com/embed/D0efHEJsfHo?si=sgVnFouP7YK9LBjO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></p>
+```
+
+## More problems?
+
+. . .
+
+Single trees are *greedy* 
+
+Which leads to poor prediction
+
+. . .
+
+**Solution: wisdom of the crowds**
+
+- Bagging
+
+- Random forests
+
+- Boosting
+
+- BART
+
+## Bagging
+
+**Bootstrap AGGregatING**
+
+![](img/random_forest.jpg){fig-align="center"}
+
+## Here's the magic
+
+::: incremental
+- Every bootstrap resample contains about 2/3 of the data on average
+
+- The remaining 1/3 are *out-of-bag* observations (OOB)
+
+- OOB observations are a natural test set for each boostrap resample
+
+- Each OOB observation gets B/3 predictions
+
+- Which we can average/majority vote to evaluate test performance
+:::
+
+::: aside
+The 2/3 idea comes from [Efron and Tibshirani (1995)](https://doi.org/10.1080/01621459.1997.10474007)
+:::
+
+## Problem?
+
+Bootstrap resamples are correlated!
+
+. . .
+
+Bagged trees can get stuck on local optima
+
+. . .
+
+**Solution: Decorrelate trees**
+
+## Random forests
+
+::: incremental
+
+- Draw B bootstrap resamples
+
+- For *every split* in *each of the B trees*, draw $m$ random predictors as candidates for the split 
+
+- Default is $m = \sqrt{p}$ but can be tuned
+
+- This creates trees that still use overlapping data, but look very different from each other
+
+- Improves OOB test error
+
+:::
+
+::: aside
+Exploration idea: Prove to yourself why $m = \sqrt{p}$ is a good idea
+:::
+
+## `rand_forest()` in `{parsnip}`
+
+```{r, echo = TRUE, eval = FALSE}
+rand_forest(
+  mode = "unknown",
+  engine = "ranger",
+  mtry = NULL,
+  trees = NULL,
+  min_n = NULL
+)
+```
+
+- `mtry`: Number of randomly sampled predictors
+
+- `trees`: Number of trees (bootstraps)
+
+- `min_n`: Minimum number of data points that are required to split a node further
+
+::: aside
+Why don't we have a parameter for cost complexity tuning?
+:::
+
+## Alternative
+
+. . .
+
+Instead of decorrelating trees
+
+. . .
+
+Why not treat the overlap in bootstrap resamples as an advantage?
+
+. . .
+
+**Proposal: Build an ensemble that learns from every bootstrap**
+
+## Boosting
+
+
+::: incremental
+1. Specify a number of trees $B$ (these are not bootstrap resamples)
+
+2. For $b = 1$ fit the tree as usual to the training data
+
+3. For $b = 2, \ldots, B$ replace the outcome with the residuals from the previous tree
+
+4. Fit a shrunken tree to the updated residuals
+
+5. Repeat $B$ times
+
+6. Create predictions with $B$th tree
+
+:::
+
+## More formally (ISL p. 347)
+
+![](img/boosting.png){fig-align="center" width=65%}
+
+::: aside
+Usually $\lambda = {0.001, 0.01}$ because boosted trees are a *slow learner*
+:::
+
+---
+
+**Random forest:** Decorrelated trees
+
+**Boosting:** Grow trees sequentially
+
+---
+
+[CONTINUE HERE WHY NOT BOTH MEME]

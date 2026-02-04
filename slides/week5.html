@@ -10,7 +10,7 @@
   <meta name="generator" content="quarto-1.8.26">
 
   <meta name="author" content="Machine Learning in Political Science">
-  <title>quarto-input75e582a6ba2dd94e</title>
+  <title>quarto-inputb28aaf2b32212dad</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -28,6 +28,72 @@
       margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
       vertical-align: middle;
     }
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      { color: #003b4f; background-color: #f1f3f5; }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span { color: #003b4f; } /* Normal */
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { color: #657422; } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #003b4f; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { color: #00769e; } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #003b4f; font-weight: bold; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #003b4f; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
   <link rel="stylesheet" href="week5_files/libs/revealjs/dist/theme/quarto-5f66212b01f094180b8d10b5b9960144.css">
   <link href="week5_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
@@ -139,6 +205,13 @@ Machine Learning in Political Science
 </div>
 
 </section>
+<section id="exploration-ideas" class="slide level2 center">
+<h2>Exploration ideas</h2>
+<ul>
+<li><p>Walk yourself through choosing the right tree-based method for your data</p></li>
+<li><p><em>From next week’s material:</em> Teach yourself how to tune a pre-trained neural network (or similar model) in Python</p></li>
+</ul>
+</section>
 <section id="plan-for-today" class="slide level2 center">
 <h2>Plan for today</h2>
 <p><strong>Digressions</strong></p>
@@ -189,9 +262,169 @@ Machine Learning in Political Science
 </figure>
 </div>
 
-
 <aside><div>
 <p><a href="https://doi.org/10.1038/s41586-024-07566-y" class="uri">https://doi.org/10.1038/s41586-024-07566-y</a></p>
+</div></aside></section></section>
+<section>
+<section id="tree-based-methods" class="title-slide slide level1 center">
+<h1>Tree-Based Methods</h1>
+
+</section>
+<section id="regressionclassification-trees" class="slide level2 center">
+<h2>Regression/classification trees</h2>
+
+<img data-src="img/trees.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="recursive-binary-partitioning" class="slide level2 center">
+<h2>Recursive binary partitioning</h2>
+
+<img data-src="img/recursive_1.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="recursive-binary-partitioning-1" class="slide level2 center">
+<h2>Recursive binary partitioning</h2>
+
+<img data-src="img/recursive_2.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="recursive-binary-partitioning-2" class="slide level2 center">
+<h2>Recursive binary partitioning</h2>
+
+<img data-src="img/recursive_3.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="recursive-binary-partitioning-3" class="slide level2 center">
+<h2>Recursive binary partitioning</h2>
+
+<img data-src="img/recursive_4.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="recursive-binary-partitioning-4" class="slide level2 center">
+<h2>Recursive binary partitioning</h2>
+
+<img data-src="img/recursive_5.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="recursive-binary-partitioning-5" class="slide level2 center">
+<h2>Recursive binary partitioning</h2>
+
+<img data-src="img/recursive_6.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="problems" class="slide level2 center">
+<h2>Problems?</h2>
+<div class="fragment">
+<p>Deep trees overfit on the training data</p>
+</div>
+<div class="fragment">
+<p>Shallow trees have high bias</p>
+</div>
+<div class="fragment">
+<p>How to balance number of splits?</p>
+</div>
+</section>
+<section id="cost-complexity-tuning" class="slide level2 center">
+<h2>Cost complexity tuning</h2>
+<p align="center"><iframe width="1000" height="600" src="https://www.youtube.com/embed/D0efHEJsfHo?si=sgVnFouP7YK9LBjO" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen=""></iframe></p>
+</section>
+<section id="more-problems" class="slide level2 center">
+<h2>More problems?</h2>
+<div class="fragment">
+<p>Single trees are <em>greedy</em></p>
+<p>Which leads to poor prediction</p>
+</div>
+<div class="fragment">
+<p><strong>Solution: wisdom of the crowds</strong></p>
+<ul>
+<li><p>Bagging</p></li>
+<li><p>Random forests</p></li>
+<li><p>Boosting</p></li>
+<li><p>BART</p></li>
+</ul>
+</div>
+</section>
+<section id="bagging" class="slide level2 center">
+<h2>Bagging</h2>
+<p><strong>Bootstrap AGGregatING</strong></p>
+
+<img data-src="img/random_forest.jpg" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="heres-the-magic" class="slide level2 center">
+<h2>Here’s the magic</h2>
+<ul>
+<li class="fragment"><p>Every bootstrap resample contains about 2/3 of the data on average</p></li>
+<li class="fragment"><p>The remaining 1/3 are <em>out-of-bag</em> observations (OOB)</p></li>
+<li class="fragment"><p>OOB observations are a natural test set for each boostrap resample</p></li>
+<li class="fragment"><p>Each OOB observation gets B/3 predictions</p></li>
+<li class="fragment"><p>Which we can average/majority vote to evaluate test performance</p></li>
+</ul>
+
+<aside><div>
+<p>The 2/3 idea comes from <a href="https://doi.org/10.1080/01621459.1997.10474007">Efron and Tibshirani (1995)</a></p>
+</div></aside></section>
+<section id="problem" class="slide level2 center">
+<h2>Problem?</h2>
+<p>Bootstrap resamples are correlated!</p>
+<div class="fragment">
+<p>Bagged trees can get stuck on local optima</p>
+</div>
+<div class="fragment">
+<p><strong>Solution: Decorrelate trees</strong></p>
+</div>
+</section>
+<section id="random-forests" class="slide level2 center">
+<h2>Random forests</h2>
+<ul>
+<li class="fragment"><p>Draw B bootstrap resamples</p></li>
+<li class="fragment"><p>For <em>every split</em> in <em>each of the B trees</em>, draw <span class="math inline">\(m\)</span> random predictors as candidates for the split</p></li>
+<li class="fragment"><p>Default is <span class="math inline">\(m = \sqrt{p}\)</span> but can be tuned</p></li>
+<li class="fragment"><p>This creates trees that still use overlapping data, but look very different from each other</p></li>
+<li class="fragment"><p>Improves OOB test error</p></li>
+</ul>
+
+<aside><div>
+<p>Exploration idea: Prove to yourself why <span class="math inline">\(m = \sqrt{p}\)</span> is a good idea</p>
+</div></aside></section>
+<section id="rand_forest-in-parsnip" class="slide level2 center">
+<h2><code>rand_forest()</code> in <code>{parsnip}</code></h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">rand_forest</span>(</span>
+<span id="cb1-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">"unknown"</span>,</span>
+<span id="cb1-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">engine =</span> <span class="st">"ranger"</span>,</span>
+<span id="cb1-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">mtry =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">trees =</span> <span class="cn">NULL</span>,</span>
+<span id="cb1-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_n =</span> <span class="cn">NULL</span></span>
+<span id="cb1-7"><a href="" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<ul>
+<li><p><code>mtry</code>: Number of randomly sampled predictors</p></li>
+<li><p><code>trees</code>: Number of trees (bootstraps)</p></li>
+<li><p><code>min_n</code>: Minimum number of data points that are required to split a node further</p></li>
+</ul>
+
+<aside><div>
+<p>Why don’t we have a parameter for cost complexity tuning?</p>
+</div></aside></section>
+<section id="alternative" class="slide level2 center">
+<h2>Alternative</h2>
+<div class="fragment">
+<p>Instead of decorrelating trees</p>
+</div>
+<div class="fragment">
+<p>Why not treat the overlap in bootstrap resamples as an advantage?</p>
+</div>
+<div class="fragment">
+<p><strong>Proposal: Build an ensemble that learns from every bootstrap</strong></p>
+</div>
+</section>
+<section id="boosting" class="slide level2 center">
+<h2>Boosting</h2>
+<ol type="1">
+<li class="fragment"><p>Specify a number of trees <span class="math inline">\(B\)</span> (these are not bootstrap resamples)</p></li>
+<li class="fragment"><p>For <span class="math inline">\(b = 1\)</span> fit the tree as usual to the training data</p></li>
+<li class="fragment"><p>For <span class="math inline">\(b = 2, \ldots, B\)</span> replace the outcome with the residuals from the previous tree</p></li>
+<li class="fragment"><p>Fit a shrunken tree to the updated residuals</p></li>
+<li class="fragment"><p>Repeat <span class="math inline">\(B\)</span> times</p></li>
+<li class="fragment"><p>Create predictions with <span class="math inline">\(B\)</span>th tree</p></li>
+</ol>
+</section>
+<section id="more-formally-isl-p.-347" class="slide level2 center">
+<h2>More formally (ISL p.&nbsp;347)</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="img/boosting.png" class="quarto-figure quarto-figure-center" style="width:65.0%"></p>
+</figure>
+</div>
+
+
+<aside><div>
+<p>Usually <span class="math inline">\(\lambda = {0.001, 0.01}\)</span> because boosted trees are a <em>slow learner</em></p>
 </div></aside></section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
