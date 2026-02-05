@@ -227,7 +227,7 @@ rand_forest(
 - `min_n`: Minimum number of data points that are required to split a node further
 
 ::: aside
-Why don't we have a parameter for cost complexity tuning?
+Why don't we have a parameter for cost complexity pruning?
 :::
 
 ## Alternative
@@ -276,6 +276,58 @@ Usually $\lambda = {0.001, 0.01}$ because boosted trees are a *slow learner*
 
 **Boosting:** Grow trees sequentially
 
----
+. . .
 
-[CONTINUE HERE WHY NOT BOTH MEME]
+![](https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHl2cDVweWU5NjZpdWdqYzgxZXM5eHc2ZmJocmxvdjVwd2ZoeDh1NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7aCRloybJlXpNjSU/giphy.gif){fig-align="center"}
+
+
+## BART
+
+**Bayesian Additive Regression Trees**
+
+![](img/bart.png){fig-align="center"}
+
+## Perturbations?
+
+Four types:
+
+1. Grow
+
+2. Prune
+
+3. Change (cutoff of an internal node)
+
+4. Swap (splitting rules of two parent child nodes)
+
+::: aside
+Chosen at random via a [Metropolis-Hastings MCMC](https://en.wikipedia.org/wiki/Metropolis–Hastings_algorithm) algorithm
+:::
+
+
+## Examples of perturbations
+
+![](img/bart_perturbations.png){fig-align="center"}
+
+## What's different?
+
+::: incremental
+- Output is a collection of prediction models
+
+- Early predictions are bad, but get better over time
+
+- We take the average of predictions after $L$ *burn-in* iterations
+
+- Perturbations guard against overfitting on the training data
+
+- **Also:** Easier to connect to inferential tasks because we are creating *posterior distributions*
+:::
+
+::: aside
+[Hastie and Tibshirani explain it better](https://youtu.be/xWhPwHZF4c0?si=sHfIOpO5UFcZiPzd)
+:::
+
+## Extensions
+
+1. [Extreme gradient boosting (XGBoost)](https://xgboost.readthedocs.io/en/stable/)
+
+2. Nodes can be split on whatever quantity of interest you want, like [average treatment effects](https://grf-labs.github.io/grf/index.html)

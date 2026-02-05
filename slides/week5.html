@@ -6,11 +6,11 @@
 <script src="week5_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="week5_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="week5_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="week5_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.8.26">
+<link href="week5_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.32">
 
   <meta name="author" content="Machine Learning in Political Science">
-  <title>quarto-inputb28aaf2b32212dad</title>
+  <title>quarto-input5595c439bcd5c061</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -95,7 +95,7 @@
     code span.vs { color: #20794d; } /* VerbatimString */
     code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </style>
-  <link rel="stylesheet" href="week5_files/libs/revealjs/dist/theme/quarto-5f66212b01f094180b8d10b5b9960144.css">
+  <link rel="stylesheet" href="week5_files/libs/revealjs/dist/theme/quarto-ee9ab3830bbe7759b42dda8416faf5cd.css">
   <link href="week5_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="week5_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="week5_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -374,13 +374,13 @@ Machine Learning in Political Science
 <section id="rand_forest-in-parsnip" class="slide level2 center">
 <h2><code>rand_forest()</code> in <code>{parsnip}</code></h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">rand_forest</span>(</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="" aria-hidden="true" tabindex="-1"></a><span class="fu">rand_forest</span>(</span>
 <span id="cb1-2"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">mode =</span> <span class="st">"unknown"</span>,</span>
 <span id="cb1-3"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">engine =</span> <span class="st">"ranger"</span>,</span>
 <span id="cb1-4"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">mtry =</span> <span class="cn">NULL</span>,</span>
 <span id="cb1-5"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">trees =</span> <span class="cn">NULL</span>,</span>
 <span id="cb1-6"><a href="" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_n =</span> <span class="cn">NULL</span></span>
-<span id="cb1-7"><a href="" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-7"><a href="" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <ul>
 <li><p><code>mtry</code>: Number of randomly sampled predictors</p></li>
@@ -389,7 +389,7 @@ Machine Learning in Political Science
 </ul>
 
 <aside><div>
-<p>Why don’t we have a parameter for cost complexity tuning?</p>
+<p>Why don’t we have a parameter for cost complexity pruning?</p>
 </div></aside></section>
 <section id="alternative" class="slide level2 center">
 <h2>Alternative</h2>
@@ -422,10 +422,64 @@ Machine Learning in Political Science
 </figure>
 </div>
 
-
 <aside><div>
 <p>Usually <span class="math inline">\(\lambda = {0.001, 0.01}\)</span> because boosted trees are a <em>slow learner</em></p>
-</div></aside></section></section>
+</div></aside></section>
+<section class="slide level2 center">
+
+<p><strong>Random forest:</strong> Decorrelated trees</p>
+<p><strong>Boosting:</strong> Grow trees sequentially</p>
+<div class="fragment">
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHl2cDVweWU5NjZpdWdqYzgxZXM5eHc2ZmJocmxvdjVwd2ZoeDh1NSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7aCRloybJlXpNjSU/giphy.gif" class="quarto-figure quarto-figure-center"></p>
+</figure>
+</div>
+</div>
+</section>
+<section id="bart" class="slide level2 center">
+<h2>BART</h2>
+<p><strong>Bayesian Additive Regression Trees</strong></p>
+
+<img data-src="img/bart.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="perturbations" class="slide level2 center">
+<h2>Perturbations?</h2>
+<p>Four types:</p>
+<ol type="1">
+<li><p>Grow</p></li>
+<li><p>Prune</p></li>
+<li><p>Change (cutoff of an internal node)</p></li>
+<li><p>Swap (splitting rules of two parent child nodes)</p></li>
+</ol>
+
+<aside><div>
+<p>Chosen at random via a <a href="https://en.wikipedia.org/wiki/Metropolis–Hastings_algorithm">Metropolis-Hastings MCMC</a> algorithm</p>
+</div></aside></section>
+<section id="examples-of-perturbations" class="slide level2 center">
+<h2>Examples of perturbations</h2>
+
+<img data-src="img/bart_perturbations.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="whats-different" class="slide level2 center">
+<h2>What’s different?</h2>
+<ul>
+<li class="fragment"><p>Output is a collection of prediction models</p></li>
+<li class="fragment"><p>Early predictions are bad, but get better over time</p></li>
+<li class="fragment"><p>We take the average of predictions after <span class="math inline">\(L\)</span> <em>burn-in</em> iterations</p></li>
+<li class="fragment"><p>Perturbations guard against overfitting on the training data</p></li>
+<li class="fragment"><p><strong>Also:</strong> Easier to connect to inferential tasks because we are creating <em>posterior distributions</em></p></li>
+</ul>
+
+<aside><div>
+<p><a href="https://youtu.be/xWhPwHZF4c0?si=sHfIOpO5UFcZiPzd">Hastie and Tibshirani explain it better</a></p>
+</div></aside></section>
+<section id="extensions" class="slide level2 center">
+<h2>Extensions</h2>
+<ol type="1">
+<li><p><a href="https://xgboost.readthedocs.io/en/stable/">Extreme gradient boosting (XGBoost)</a></p></li>
+<li><p>Nodes can be split on whatever quantity of interest you want, like <a href="https://grf-labs.github.io/grf/index.html">average treatment effects</a></p></li>
+</ol>
+
+</section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
@@ -615,7 +669,7 @@ Machine Learning in Political Science
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -727,14 +781,13 @@ Machine Learning in Political Science
           e.clearSelection();
         }
         const getTextToCopy = function(trigger) {
-          const outerScaffold = trigger.parentElement.cloneNode(true);
-          const codeEl = outerScaffold.querySelector('code');
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
             }
-          }
-          return codeEl.innerText;
+            return codeEl.innerText;
         }
         const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
           text: getTextToCopy
