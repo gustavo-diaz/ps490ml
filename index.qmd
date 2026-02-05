@@ -19,7 +19,7 @@ Click [here](/syllabus.pdf) for the most recent version.
 
 [Week 4: Validation, selection, regularization](https://github.com/gustavo-diaz/ps490ml/blob/main/scripts/validation.qmd)
 
-Week 5: Tree-based methods
+[Week 5: Tree-based methods](slides/week5.html)
 
 Week 6: Neural networks
 
