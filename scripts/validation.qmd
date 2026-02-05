@@ -1,5 +1,5 @@
 ---
-title: "Model selection and assessment
+title: "Model selection and assessment"
 author: "POLI_SCI 490: Machine Learning in Political Science"
 format: html
 ---
@@ -25,6 +25,8 @@ We will work with the [Online News Popularity](https://archive.ics.uci.edu/datas
 url = "https://raw.githubusercontent.com/gustavo-diaz/ps490ml/refs/heads/main/data/OnlineNewsPopularity.csv"
 
 online_news = read.csv(url) 
+
+online_news
 ```
 
 
@@ -47,6 +49,7 @@ We will then divide the data in training and test sets.
 set.seed(20260129)
 
 # 80/20 split
+# What is cross-validation addressing?
 # Why do we need a test set if we are doing CV later?
 data_split = initial_split(news, prop = 0.8)
 
@@ -69,7 +72,7 @@ news_y = train_df$shares
 
 lasso_fit = glmnet(x = news_x,
                    y = news_y,
-                   alpha = 1,
+                   alpha = 0,
                    nlambda = 100) # can also be grid
 
 plot(lasso_fit)
@@ -161,6 +164,7 @@ boot = bootstraps(train_df, times = 25)
 cv = vfold_cv(train_df, v = 10)
 
 boot
+
 cv
 
 # The magic here is that folds/resamples are stored as promises
@@ -170,7 +174,8 @@ cv$splits
 We also need a grid of lambdas to tune
 
 ```{r}
-lambda_grid = grid_regular(penalty(), levels = 50)
+lambda_grid = grid_regular(penalty(), 
+                           levels = 50)
 
 lambda_grid
 ```
@@ -238,6 +243,8 @@ lasso_best = lasso_grid %>%
     metric = "rmse",
     penalty
   )
+
+lasso_best
 ```
 
 Then we finalize workflow
