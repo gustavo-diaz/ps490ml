@@ -1,0 +1,163 @@
+---
+title: | 
+       | Neural Networks
+subtitle: "POLI_SCI 490"
+author: "Machine Learning in Political Science"
+format: 
+  revealjs:
+    center: true
+    slide-number: false
+    progress: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.pos = "center")
+
+# Packages
+library(tidyverse)
+library(tidymodels)
+library(tinytable)
+library(kableExtra)
+library(marginaleffects)
+
+# ggplot global options
+theme_set(theme_gray(base_size = 20))
+
+# Colors
+nu_purple =  "#4E2A84"
+```
+
+## Exploration idea
+
+Pick up a tutorial using a pre-trained neural network or LLM and apply it to new data
+
+## Tutorials
+
+## Plan for today
+
+**Talk**
+
+- Intuition behind neural networks
+- CNNs (+ application readings)
+- RNNs
+
+**Coding**
+- Simple NN in `R`
+- Pre-trained NN in `Python`
+
+# Intuition
+
+## Two mental shifts
+
+1. Regression coefficients are weights
+2. Multiple transformations help you learn complex decision rules
+
+## Two mental shifts
+
+1. **Regression coefficients are weights**
+2. Multiple transformations help you learn complex decision rules
+
+## A linear regression with new names
+
+$$
+\widehat y = \beta_0 + \beta_1 x_1 + \beta_2 x_2
+$$
+
+. . .
+
+Rewrite for an arbitrary number of predictors
+
+## A linear regression with new names
+
+$$
+\widehat{y} = \beta_0 + \sum_{j=1}^p \beta X
+$$
+
+. . .
+
+**Shift:** We are not learning *outcomes*, but functions that explain how the outcome would look like given new data
+
+## A linear regression with new names
+
+$$
+f(X) = \beta_0 + \sum_{j=1}^p \beta X
+$$
+
+. . .
+
+
+We learn that we can find the optimal parameter of for $\beta = (\beta_0, \beta_1, \ldots, \beta_k)$ by using OLS or MLE
+
+. . .
+
+**Shift:** We could just try many different values
+
+## A linear regression with new names
+
+
+```{=latex}
+\begin{equation}
+f(X) = \beta_0 +\begin{cases} 
+\sum_{j=1}^p \beta_{[1]} X \\
+\sum_{j=1}^p \beta_{[2]} X \\
+\sum_{j=1}^p \beta_{[3]} X \\
+\vdots \\
+\sum_{j=1}^p \beta_{[k]} X
+
+\end{cases}
+\end{equation}
+```
+
+. . .
+
+Then we can aggregate with a weighted average
+
+## A linear regression with new names
+
+$$
+f(X) = \beta_0 + \sum_{k=1}^K\left (\sum_{j=1}^p w_{[k]}\beta_{[k]} X \right )
+$$
+
+. . .
+
+**Shift:** The parenthetical is a *function* $g(\cdot)$ too
+
+::: aside
+This is shoddy notation
+:::
+
+## A linear regression with new names
+
+$$
+f(X) = \beta_0 + g(w,\beta,X)
+$$
+
+. . .
+
+So we predict $Y$ with a function that averages over many functions of $\beta$s with weight $w$
+
+. . .
+
+We could use CV to tune $w$ and $\beta$
+
+. . .
+
+This is kind of a neural network with no hidden layers
+
+## Two mental shifts
+
+1. **Regression coefficients are weights**
+2. Multiple transformations help you learn complex decision rules
+
+## Two mental shifts
+
+1. Regression coefficients are weights
+2. **Multiple transformations help you learn complex decision rules**
+
+## Example: Single hidden layer NN with two nodes (whiteboard)
+
+![](img/simple_nn.png){fig-align="center"}
+
