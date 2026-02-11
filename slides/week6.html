@@ -6,11 +6,11 @@
 <script src="week6_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="week6_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="week6_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="week6_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.8.26">
+<link href="week6_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.32">
 
   <meta name="author" content="Machine Learning in Political Science">
-  <title>quarto-input3b296fe5cea9ee90</title>
+  <title>quarto-inpute8d8d55b1564464a</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -29,7 +29,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="week6_files/libs/revealjs/dist/theme/quarto-534cd8e3a96973385dffff3f4709048d.css">
+  <link rel="stylesheet" href="week6_files/libs/revealjs/dist/theme/quarto-f563837468303362081e247dddd440d0.css">
   <link href="week6_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="week6_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="week6_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -139,9 +139,12 @@ Machine Learning in Political Science
 </div>
 
 </section>
-<section id="exploration-idea" class="slide level2 center">
-<h2>Exploration idea</h2>
-<p>Pick up a tutorial using a pre-trained neural network or LLM and apply it to new data</p>
+<section id="exploration-ideas" class="slide level2 center">
+<h2>Exploration ideas</h2>
+<ul>
+<li><p>Pick up a tutorial using a pre-trained neural network or open source LLM (BERT, LLaMA) and apply it to new data</p></li>
+<li><p>Find a new NN application that does not involve text, images, audio, video, or genomics</p></li>
+</ul>
 </section>
 <section id="tutorials" class="slide level2 center">
 <h2>Tutorials</h2>
@@ -154,7 +157,12 @@ Machine Learning in Political Science
 <li>CNNs (+ application readings)</li>
 <li>RNNs</li>
 </ul>
-<p><strong>Coding</strong> - Simple NN in <code>R</code> - Pre-trained NN in <code>Python</code></p>
+<p><strong>Coding</strong></p>
+<ul>
+<li>Simple NN in <code>R</code></li>
+<li><code>Python</code> IDE options</li>
+<li>Pre-trained NN in <code>Python</code></li>
+</ul>
 </section>
 <section>
 <section id="intuition" class="title-slide slide level1 center">
@@ -265,8 +273,123 @@ f(X) = \beta_0 + g(w,\beta,X)
 <section id="example-single-hidden-layer-nn-with-two-nodes-whiteboard" class="slide level2 center">
 <h2>Example: Single hidden layer NN with two nodes (whiteboard)</h2>
 
+<img data-src="img/simple_nn.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="single-hidden-layer-with-k-nodes" class="slide level2 center">
+<h2>Single hidden layer with K nodes</h2>
+<p><span class="math display">\[
+\begin{align}
+f(X) &amp; = &amp; \beta_0 + \sum_{k=1}^K \beta_k \color{purple}{h_k(X)}\\
+&amp; = &amp; \beta_0 + \sum_{k=1}^K \beta_k \color{purple}{g(w_{k0} + \sum_{j=1}^p w_{kj} X_j)}
+\end{align}
+\]</span></p>
+</section>
+<section id="moving-pieces" class="slide level2 center">
+<h2>Moving pieces</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><strong>Example: MNIST data</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="img/mnist.png"></p>
+<figcaption>Modified National Institute of Standards and Technology</figcaption>
+</figure>
+</div>
+</div><div class="column" style="width:50%;">
+<ul>
+<li class="fragment">N = 60k training, 10k test</li>
+<li class="fragment">784 pixels (variables) per image</li>
+<li class="fragment">785 coefficients in input</li>
+<li class="fragment">Layer 1: 256 nodes</li>
+<li class="fragment">Layer 2: 128 nodes</li>
+<li class="fragment"><span class="math inline">\(785 \times 256 + 257 \times 128 = 233,856\)</span> weights!</li>
+</ul>
+</div></div>
+<div class="fragment">
+<p>We need <strong>regularization</strong> and efficient <strong>parameter search</strong></p>
+</div>
+</section>
+<section id="regularization" class="slide level2 center">
+<h2>Regularization</h2>
+<p>Two options:</p>
+<ol type="1">
+<li><p>Lasso/ridge penalty <span class="math inline">\(\lambda\)</span></p></li>
+<li><p>Dropout rate <span class="math inline">\(\phi\)</span></p></li>
+</ol>
+</section>
+<section id="dropout-learning" class="slide level2 center">
+<h2>Dropout learning</h2>
 
-<img data-src="img/simple_nn.png" class="quarto-figure quarto-figure-center r-stretch"></section></section>
+<img data-src="img/nn_dropout.png" class="r-stretch"></section>
+<section id="optimizing-weights-and-biases" class="slide level2 center">
+<h2>Optimizing weights and biases</h2>
+<p>You <em>could</em> try an extremely large grid of possible parameters… but that would take <em>forever</em></p>
+<div class="fragment">
+<p>So we take two steps to tune weights and biases efficiently</p>
+<ol type="1">
+<li>Backpropagation</li>
+</ol>
+<p>AND</p>
+<ol start="2" type="1">
+<li>Gradient descent</li>
+</ol>
+</div>
+</section>
+<section class="slide level2 center">
+
+
+<img data-src="https://miro.medium.com/v2/resize:fit:1280/format:webp/1*VF9xl3cZr2_qyoLfDJajZw.gif" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="gradient-descent" class="slide level2 center">
+<h2>Gradient descent</h2>
+
+<img data-src="https://telefonicatech.uk/wp-content/uploads/adatis/GradientDescentGIF.gif" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="many-decisions" class="slide level2 center">
+<h2>Many decisions</h2>
+<ul>
+<li><p>Number of hidden layers</p></li>
+<li><p>Nodes per layer</p></li>
+<li><p>Dropout rate/regularization penalty</p></li>
+<li><p>Stochastic gradient descent batch size</p></li>
+<li><p>Number of epochs</p></li>
+<li><p>Data augmentation</p></li>
+</ul>
+<div class="fragment">
+<p><strong>In practice:</strong> Use pre-trained neural networks</p>
+</div>
+</section></section>
+<section>
+<section id="special-types" class="title-slide slide level1 center">
+<h1>Special types</h1>
+
+</section>
+<section id="convolutional-neural-network" class="slide level2 center">
+<h2>Convolutional Neural Network</h2>
+<p><strong>CNN</strong></p>
+
+<img data-src="img/cnn.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="convolution-layer" class="slide level2 smaller center">
+<h2>Convolution layer</h2>
+<p><span class="math display">\[
+\text{Original Image} = \begin{bmatrix} a &amp; b &amp; c \\ d &amp; e &amp; f \\ g &amp; h &amp; i \\ j &amp; k &amp; l \end{bmatrix}
+\]</span></p>
+<p><span class="math display">\[
+\text{Convolution Filter} = \begin{bmatrix} \alpha &amp; \beta \\ \gamma &amp; \delta \end{bmatrix}
+\]</span></p>
+<p><span class="math display">\[
+\text{Convolved Image} = \begin{bmatrix} a\alpha + b\beta + d\gamma + e\delta &amp; b\alpha + c\beta + e\gamma + f\delta \\[6pt] d\alpha + e\beta + g\gamma + h\delta &amp; e\alpha + f\beta + h\gamma + i\delta \\[6pt] g\alpha + h\beta + j\gamma + k\delta &amp; h\alpha + i\beta + k\gamma + l\delta \end{bmatrix}
+\]</span></p>
+</section>
+<section id="pooling-layer" class="slide level2 center">
+<h2>Pooling layer</h2>
+<p><span class="math display">\[
+\text{Max pool } \begin{bmatrix} 1 &amp; 2 &amp; \color{purple}5 &amp; 3 \\ \color{purple}3 &amp; 0 &amp; 1 &amp; 2 \\ \color{purple}2 &amp; 1 &amp; 3 &amp; \color{purple}4 \\ 1 &amp; 1 &amp; 2 &amp; 0 \end{bmatrix} \;\longrightarrow\; \begin{bmatrix} 3 &amp; 5 \\ 2 &amp; 4 \end{bmatrix}
+\]</span></p>
+</section>
+<section id="recurrrent-neural-network" class="slide level2 center">
+<h2>Recurrrent Neural Network</h2>
+<p><strong>RNN</strong></p>
+
+
+<img data-src="img/rnn.png" class="quarto-figure quarto-figure-center r-stretch"></section></section>
     </div>
   <div class="quarto-auto-generated-content" style="display: none;">
 <div class="footer footer-default">
@@ -456,7 +579,7 @@ f(X) = \beta_0 + g(w,\beta,X)
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -568,14 +691,13 @@ f(X) = \beta_0 + g(w,\beta,X)
           e.clearSelection();
         }
         const getTextToCopy = function(trigger) {
-          const outerScaffold = trigger.parentElement.cloneNode(true);
-          const codeEl = outerScaffold.querySelector('code');
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
             }
-          }
-          return codeEl.innerText;
+            return codeEl.innerText;
         }
         const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
           text: getTextToCopy
