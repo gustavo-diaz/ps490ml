@@ -21,7 +21,7 @@ Click [here](/syllabus.pdf) for the most recent version.
 
 [Week 5: Tree-based methods](slides/week5.html)
 
-Week 6: Neural networks
+[Week 6: Neural networks](slides/week6.html)
 
 Week 7: Ensemble learning
 
