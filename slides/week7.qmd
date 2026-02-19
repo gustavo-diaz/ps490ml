@@ -37,14 +37,36 @@ nu_purple =  "#4E2A84"
 
 - Model stacking
 
-**Talk**
+**Discussion**
 
-- Ensemble learning
-- Application readings
+- Ensemble learning + Reading
 
 # Coding
 
-[GITHUB URL HERE]
+<https://github.com/gustavo-diaz/ps490ml/blob/main/scripts/stack.qmd>
+
+# Discussion
+
+## Ensemble approaches
+
+1. Bagging (+ random forests)
+
+2. Boosting
+
+3. Bayesian models (e.g. BART)
+
+4. *Stacking*
+
+# Questions
+
+## When do you need an ensemble?
+
+## Which approach to ensembles do you prefer?
+
+## What is better?
+
+1. Fine-tuning a single model
+2. Stacking many different kinds of models
 
 
 
