@@ -1,0 +1,78 @@
+---
+title: | 
+       | Unsupervised Learning
+subtitle: "POLI_SCI 490"
+author: "Machine Learning in Political Science"
+format: 
+  revealjs:
+    center: true
+    slide-number: false
+    progress: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      warning = FALSE,
+                      message = FALSE,
+                      fig.pos = "center")
+
+# Packages
+library(tidyverse)
+library(tidymodels)
+library(tinytable)
+library(kableExtra)
+library(marginaleffects)
+
+# ggplot global options
+theme_set(theme_gray(base_size = 20))
+
+# Colors
+nu_purple =  "#4E2A84"
+```
+
+
+## Plan for today
+
+**Discussion**
+
+- Unsupervised learning
+- Principal components
+- Clustering
+- Extensions
+- Semi-supervised learning
+- Application readings
+
+::: aside
+Coding tutorials in the final slide
+:::
+
+# Unsupervised Learning
+
+## Big picture
+
+![](https://workshops.tidymodels.org/slides/images/ml_illustration.jpg){fig-align="center"}
+
+## Why is it called *unsupervised*?
+
+## Types
+
+1. Clustering
+
+2. Dimension reduction
+
+## Types
+
+1. Clustering $\rightarrow$ Discrete groups
+
+2. Dimension reduction
+
+## Types
+
+1. Clustering $\rightarrow$ Discrete groups
+
+2. Dimension reduction $\rightarrow$ Probabilistic membership
+
+## Clustering
+
+[CONTINUE HERE]
+
