@@ -6,11 +6,11 @@
 <script src="week8_files/libs/quarto-html/tippy.umd.min.js"></script>
 <link href="week8_files/libs/quarto-html/tippy.css" rel="stylesheet">
 <link href="week8_files/libs/quarto-html/light-border.css" rel="stylesheet">
-<link href="week8_files/libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
-  <meta name="generator" content="quarto-1.8.26">
+<link href="week8_files/libs/quarto-html/quarto-syntax-highlighting-37eea08aefeeee20ff55810ff984fec1.css" rel="stylesheet" id="quarto-text-highlighting-styles"><meta charset="utf-8">
+  <meta name="generator" content="quarto-1.7.32">
 
   <meta name="author" content="Machine Learning in Political Science">
-  <title>quarto-inputf7f3d8af6da9d389</title>
+  <title>quarto-inputc3780e706967427f</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -29,7 +29,7 @@
       vertical-align: middle;
     }
   </style>
-  <link rel="stylesheet" href="week8_files/libs/revealjs/dist/theme/quarto-534cd8e3a96973385dffff3f4709048d.css">
+  <link rel="stylesheet" href="week8_files/libs/revealjs/dist/theme/quarto-f563837468303362081e247dddd440d0.css">
   <link href="week8_files/libs/revealjs/plugin/quarto-line-highlight/line-highlight.css" rel="stylesheet">
   <link href="week8_files/libs/revealjs/plugin/reveal-menu/menu.css" rel="stylesheet">
   <link href="week8_files/libs/revealjs/plugin/reveal-menu/quarto-menu.css" rel="stylesheet">
@@ -144,13 +144,16 @@ Machine Learning in Political Science
 <p><strong>Discussion</strong></p>
 <ul>
 <li>Unsupervised learning</li>
-<li>Principal components</li>
 <li>Clustering</li>
-<li>Extensions</li>
-<li>Semi-supervised learning</li>
+<li>Principal components</li>
+<li>Extension: Mixture models</li>
+<li>Semi-supervised learning (if we have time)</li>
 <li>Application readings</li>
 </ul>
-</section>
+
+<aside><div>
+<p>Coding tutorials in the final slide</p>
+</div></aside></section>
 <section>
 <section id="unsupervised-learning" class="title-slide slide level1 center">
 <h1>Unsupervised Learning</h1>
@@ -183,6 +186,338 @@ Machine Learning in Political Science
 <li><p>Clustering <span class="math inline">\(\rightarrow\)</span> Discrete groups</p></li>
 <li><p>Dimension reduction <span class="math inline">\(\rightarrow\)</span> Probabilistic membership</p></li>
 </ol>
+</section>
+<section id="k-means-clustering" class="slide level2 center">
+<h2>K-means clustering</h2>
+<p><strong>Algorithm</strong></p>
+<div class="fragment">
+<ol type="1">
+<li><p>Randomly assign a number (cluster), from <span class="math inline">\(1\)</span> to <span class="math inline">\(K\)</span>, to each observation.</p></li>
+<li><p>Iterate until cluster assignment stops changing:</p>
+<ul>
+<li>For each cluster, compute centroid</li>
+<li>Assign each observation to closest centroid</li>
+</ul></li>
+</ol>
+</div>
+<div class="fragment">
+<p>Stop when within-cluster variation is minimized</p>
+<p><span class="math display">\[
+\sum_{k=1}^K \text{WCV} (C_k)
+\]</span></p>
+</div>
+</section>
+<section class="slide level2 center">
+
+
+<img data-src="img/k_means.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="considerations" class="slide level2 center">
+<h2>Considerations</h2>
+<ul>
+<li class="fragment"><p>Need to <em>know</em> how many clusters in advance</p></li>
+<li class="fragment"><p>Clusters are non-overlapping</p></li>
+<li class="fragment"><p>Every observation must belong to a cluster</p></li>
+<li class="fragment"><p>Categorical predictors need special handling (see k-medoids clustering)</p></li>
+</ul>
+</section>
+<section id="hierarchical-clustering" class="slide level2 center">
+<h2>Hierarchical clustering</h2>
+<p><strong>Algorithm</strong></p>
+<div class="fragment">
+<ol type="1">
+<li><p>Assign <span class="math inline">\(n\)</span> observations to <span class="math inline">\(n\)</span> unique clusters</p></li>
+<li><p>Compute pairwise (Euclidean) distances</p></li>
+<li><p>Fuse two clusters based on distance to compute <span class="math inline">\(n-1\)</span> clusters</p></li>
+<li><p>Repeat until all observations belong to a cluster</p></li>
+</ol>
+</div>
+</section>
+<section id="which-produces-a-dendrogram" class="slide level2 center">
+<h2>Which produces a dendrogram</h2>
+
+<img data-src="img/dendrogram_1.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section class="slide level2 center">
+
+
+<img data-src="img/dendrogram_2.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="problem" class="slide level2 center">
+<h2>Problem</h2>
+<p>Combining two observations based on distance is easy</p>
+<div class="fragment">
+<p>But how do we aggregate based on distances between clusters?</p>
+</div>
+</section>
+<section id="types-of-linkage" class="slide level2 center">
+<h2>Types of linkage</h2>
+
+<img data-src="img/hclust_linkage.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="which-linkage-to-use" class="slide level2 center">
+<h2>Which linkage to use?</h2>
+<div class="fragment">
+<p>Single linkage suffers from <strong>chaining</strong> (clusters spread out and not compact enough)</p>
+</div>
+<div class="fragment">
+<p>Complete linkage suffers from <strong>crowding</strong> (clusters are compact but not far enough apart)</p>
+</div>
+<div class="fragment">
+<p>Average linkage uses more information, so it balances out</p>
+</div>
+</section>
+<section class="slide level2 center">
+
+
+<img data-src="img/hclust_chain_crowd.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="which-linkage-to-use-1" class="slide level2 center">
+<h2>Which linkage to use?</h2>
+<p>But average linkage suffers from what affects all averages</p>
+<div class="fragment">
+<ul>
+<li><p>Outliers</p></li>
+<li><p>Distance transformations (e.g.&nbsp;squared vs.&nbsp;absolute distance)</p></li>
+</ul>
+</div>
+<div class="fragment">
+<p>Centroids are less sensitive to these issues, but they are not meaningful in some applications</p>
+</div>
+</section>
+<section id="considerations-1" class="slide level2 center">
+<h2>Considerations</h2>
+<ul>
+<li class="fragment"><p>No need to pre-specify number of clusters, but need to commit to a cutoff after fitting</p></li>
+<li class="fragment"><p>Choice of linkage and distance metric is consequential</p></li>
+<li class="fragment"><p>Every observation must belong to a cluster</p></li>
+</ul>
+</section>
+<section id="principal-components-analysis-pca" class="slide level2 center">
+<h2>Principal components analysis (PCA)</h2>
+<p><strong>Motivation</strong></p>
+<ul>
+<li class="fragment"><p>We want to visualize <span class="math inline">\(n\)</span> observations over <span class="math inline">\(p\)</span> features</p></li>
+<li class="fragment"><p>That means <span class="math inline">\(\binom{p}{2}\)</span> possible scatterplots</p></li>
+<li class="fragment"><p>We want to find a low dimensional representation of the data that captures as much information as possible</p></li>
+</ul>
+</section>
+<section id="fitting-pca" class="slide level2 center">
+<h2>Fitting PCA</h2>
+<p>The first principal <span class="math inline">\(z_{i1}\)</span> component is a linear combination</p>
+<p><span class="math display">\[
+z_{i1} = \phi_{11}{x_{i1}} + \phi_{21}{x_{i2}} + \ldots + \phi_{p1} x_{ip}
+\]</span></p>
+<div class="fragment">
+<p>The <span class="math inline">\(\phi\)</span> elements are a vector of <em>factor loadings</em></p>
+</div>
+<div class="fragment">
+<p>Like a map to convert the values across <span class="math inline">\(p\)</span> predictors into one dimensional space</p>
+
+</div>
+<aside><div>
+<p>This requires predictors to be scaled to mean zero</p>
+</div></aside></section>
+<section id="fitting-pca-1" class="slide level2 center">
+<h2>Fitting PCA</h2>
+<p>We find the values of <span class="math inline">\(\phi\)</span> by optimizing</p>
+<p><span class="math display">\[
+\underset{\phi_{11}, \ldots, \phi_{p1}}{\text{maximize}} \left \{ \frac{1}{n} \sum_{i=1}^n \left (\sum_{j=1}^p \phi_{j1} x_{ij} \right )\right\} \text{ subject to } \sum_{j=1}^p \phi_{j1}^2 = 1
+\]</span></p>
+<div class="fragment">
+<p>Meaning we are looking for factor loadings that maximize sample variance</p>
+</div>
+<div class="fragment">
+<p>The <strong>second</strong> principal component is is fitted in the same way, except that we constrain it to the set of linear combinations that are uncorrelated (orthogonal) to the first component</p>
+</div>
+</section>
+<section id="another-way-to-think-about-it" class="slide level2 center">
+<h2>Another way to think about it</h2>
+<div class="fragment">
+<p>The <em>first</em> principal component loading vector is the line in <span class="math inline">\(p\)</span>-dimensional space that is closest to the <span class="math inline">\(n\)</span> observations</p>
+</div>
+<div class="fragment">
+<p>Adding the second, we make a <em>plane</em></p>
+</div>
+<div class="fragment">
+<p>and the third to make a <em>hyperplane</em></p>
+</div>
+</section>
+<section id="proportion-of-variance-explained" class="slide level2 center">
+<h2>Proportion of variance explained</h2>
+<p>The main idea is to reduce dimensions without dropping much information</p>
+<div class="fragment">
+<p>We can determine the <strong>proportion of variance</strong> explained by a given number of principal components</p>
+<p><span class="math display">\[
+\text{PVE} = 1 - \frac{\text{RSS}}{\text{TSE}}
+\]</span></p>
+<p>Which also helps us to determine how many components are relevant to characterize the data</p>
+</div>
+<div class="fragment">
+<p>We can interpret the values of <span class="math inline">\(z_{im}\)</span> as measures of how much an observation <em>belongs</em> to that component</p>
+</div>
+</section>
+<section class="slide level2 center">
+
+
+<img data-src="img/pca_scree.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="considerations-2" class="slide level2 center">
+<h2>Considerations</h2>
+<ul>
+<li class="fragment"><p>PCs are more abstract than clusters</p></li>
+<li class="fragment"><p>Choice of relevant dimensions is arbitrary</p></li>
+<li class="fragment"><p>Restricted to linear combinations (but see ESL on principal curves and surfaces)</p></li>
+<li class="fragment"><p>Needs complete data set</p></li>
+</ul>
+</section></section>
+<section>
+<section id="extension" class="title-slide slide level1 center">
+<h1>Extension</h1>
+
+</section>
+<section id="so-far" class="slide level2 center">
+<h2>So far</h2>
+<p>We have unsupervised learning algorithms that either:</p>
+<ol type="1">
+<li><p>Make discrete clusters that drop information</p></li>
+<li><p>Assign scores but are too restrictive and hard to interpret</p></li>
+</ol>
+<div class="fragment">
+<p>Surprise! The solution is to take a Bayesian approach</p>
+</div>
+</section>
+<section id="mixture-models" class="slide level2 center">
+<h2>Mixture models</h2>
+<p>A family of Bayesian models that aims to identify subgroups within a population</p>
+<div class="fragment">
+<p>The key is to assume that the data is generated by a <strong>multimodal</strong> distribution, then we can estimate posterior probabilities for each unit belonging to a group</p>
+
+</div>
+<aside><div>
+<p>See <a href="https://stephens999.github.io/fiveMinuteStats/intro_to_mixture_models.html">here</a> for a brief introduction</p>
+</div></aside></section>
+<section id="example-1" class="slide level2 center">
+<h2>Example 1</h2>
+<p><strong>Latent Dirichlet Allocation (LDA)</strong></p>
+</section>
+<section id="lda" class="slide level2 center">
+<h2>LDA</h2>
+<p><strong>Motivation:</strong> Latent topics in a document have a lot of <em>in-betweenness</em></p>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="https://www.andrewheiss.com/blog/2023/09/18/understanding-dirichlet-beta-intuition/index_files/figure-html/plot-rdirichlet-3-7-2-1.png" class="quarto-figure quarto-figure-center"></p>
+</figure>
+</div>
+
+<aside><div>
+<p>See <a href="https://www.jmlr.org/papers/volume3/blei03a/blei03a.pdf">Blei et al (2003)</a> for details</p>
+</div></aside></section>
+<section class="slide level2 center">
+
+
+<img data-src="img/topic_model.png" class="quarto-figure quarto-figure-center r-stretch"></section>
+<section id="considerations-3" class="slide level2 center">
+<h2>Considerations</h2>
+<ul>
+<li class="fragment"><p>We get both topic proportions and assignments</p></li>
+<li class="fragment"><p>Need to choose and <em><strong>validate</strong></em> the number of topics</p></li>
+<li class="fragment"><p>Does not read between the lines (but see STM)</p></li>
+</ul>
+</section>
+<section id="example-2" class="slide level2 center">
+<h2>Example 2</h2>
+<p><strong>Chinese Restaurant Proces (CRP)</strong></p>
+</section>
+<section id="crp" class="slide level2 center">
+<h2>CRP</h2>
+<p><strong>Motivation:</strong> Seating customers in a restaurant with infinite tables of infinite capacity each</p>
+<div class="fragment">
+<p>Start with a customer seating in one table</p>
+</div>
+<div class="fragment">
+<p>A new customer is assigned to a new table with probability <span class="math inline">\(\frac{\alpha}{(i-1)+ \alpha}\)</span></p>
+<p>and to an existing table with probability <span class="math inline">\(\frac{n_k}{(i-1)+ \alpha}\)</span></p>
+<p>where <span class="math inline">\(n_k\)</span> is the number of customers at a table and <span class="math inline">\(\alpha\)</span> is a <em>concentration</em> parameter</p>
+</div>
+<div class="fragment">
+<p>Larger <span class="math inline">\(i\)</span> <span class="math inline">\(\rightarrow\)</span> smaller probability of new cluster</p>
+</div>
+</section>
+<section id="whiteboard" class="slide level2 center">
+<h2>Whiteboard</h2>
+<div class="quarto-figure quarto-figure-center">
+<figure>
+<p><img data-src="img/chinese_restaurant.png" class="quarto-figure quarto-figure-center"></p>
+</figure>
+</div>
+
+<aside><div>
+<p>I am pretty sure this is not how Chinese restaurants work</p>
+</div></aside></section>
+<section id="considerations-4" class="slide level2 center">
+<h2>Considerations</h2>
+<ul>
+<li class="fragment"><p>LDA and topic models are <em>finite mixture models</em></p></li>
+<li class="fragment"><p>CRP and alike are <em>nonparametric mixture models</em></p></li>
+<li class="fragment"><p>CRP models a “rich get richer” process</p></li>
+<li class="fragment"><p>Creates fewer clusters</p></li>
+<li class="fragment"><p>Still need to choose a parameter</p></li>
+<li class="fragment"><p>Computationally intensive</p></li>
+</ul>
+</section>
+<section id="overall" class="slide level2 center">
+<h2>Overall</h2>
+<p>Unsupervised learning is an impressionistic endeavor</p>
+<div class="fragment">
+<p>No matter what you do, you need to defend your choice of hyperparameters</p>
+</div>
+</section></section>
+<section>
+<section id="bonus-track" class="title-slide slide level1 center">
+<h1>Bonus-track</h1>
+<p><strong>Semi-supervised learning</strong></p>
+</section>
+<section id="motivation" class="slide level2 center">
+<h2>Motivation</h2>
+<p>What do you do if you do not have labels for supervised learning?</p>
+<div class="fragment">
+<ol type="1">
+<li><p>Annotate a human-scale proportion of observations</p></li>
+<li><p>Use them as a training set to then predict the rest of the data</p></li>
+</ol>
+</div>
+<div class="fragment">
+<p>If you do too little, you may overfit on the training data</p>
+</div>
+<div class="fragment">
+<p>Doing enough may take forever!</p>
+</div>
+</section>
+<section id="alternative-ssl" class="slide level2 center">
+<h2>Alternative: SSL</h2>
+<ol type="1">
+<li><p>Label some data</p></li>
+<li><p>Use an unsupervised learning algorithm to learn structure in both labeled and unlabeled data</p></li>
+<li><p>Train supervised learning algorithm on the <em>extended</em> data</p></li>
+<li><p>Evaluate test performance</p></li>
+</ol>
+<div class="fragment">
+<p>We reduce overfitting but lose (potential) precision</p>
+</div>
+</section>
+<section id="approaches-to-ssl" class="slide level2 center">
+<h2>Approaches to SSL</h2>
+<ul>
+<li><p><strong>Cluster-then-label:</strong> Assume observations in the same cluster should have same label</p></li>
+<li><p><strong>Wrapper methods:</strong> Create probabilistic <em>pseudo-labels</em>, retain high certainty observations and retrain (smoothness assumption)</p></li>
+<li><p><strong>Active learning:</strong> Use unsupervised algorithm to determine which observations should be manually labeled next</p></li>
+</ul>
+
+<aside><div>
+<p>Learn more <a href="https://www.ibm.com/think/topics/semi-supervised-learning">here</a></p>
+</div></aside></section>
+<section id="tutorials" class="slide level2 center">
+<h2>Tutorials</h2>
+<ul>
+<li><p><a href="https://emilhvitfeldt.github.io/ISLR-tidymodels-labs/12-unsupervised-learning.html">Clustering and PCA in <code>{tidymodels}</code></a></p></li>
+<li><p><a href="https://tutorials.quanteda.io/machine-learning/topicmodel/">LDA in <code>{quanteda}</code></a></p></li>
+<li><p><a href="https://juliasilge.com/blog/sherlock-holmes-stm/">Structural topic model with <code>{stm}</code></a></p></li>
+</ul>
 
 </section></section>
     </div>
@@ -374,7 +709,7 @@ Machine Learning in Political Science
         margin: 0.1,
 
         math: {
-          mathjax: 'https://cdn.jsdelivr.net/npm/mathjax@2.7.9/MathJax.js',
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js',
           config: 'TeX-AMS_HTML-full',
           tex2jax: {
             inlineMath: [['\\(','\\)']],
@@ -486,14 +821,13 @@ Machine Learning in Political Science
           e.clearSelection();
         }
         const getTextToCopy = function(trigger) {
-          const outerScaffold = trigger.parentElement.cloneNode(true);
-          const codeEl = outerScaffold.querySelector('code');
-          for (const childEl of codeEl.children) {
-            if (isCodeAnnotation(childEl)) {
-              childEl.remove();
+            const codeEl = trigger.previousElementSibling.cloneNode(true);
+            for (const childEl of codeEl.children) {
+              if (isCodeAnnotation(childEl)) {
+                childEl.remove();
+              }
             }
-          }
-          return codeEl.innerText;
+            return codeEl.innerText;
         }
         const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
           text: getTextToCopy

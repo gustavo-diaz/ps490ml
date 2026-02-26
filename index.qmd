@@ -25,7 +25,7 @@ Click [here](/syllabus.pdf) for the most recent version.
 
 [Week 7: Ensemble learning](slides/week7.html)
 
-Week 8: Unsupervised learning
+[Week 8: Unsupervised learning](slides/week8.html)
 
 Week 9: Inference
 
